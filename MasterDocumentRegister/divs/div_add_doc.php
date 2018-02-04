@@ -46,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $client_doc_number   = test_input($_POST["client_doc_number"]);
     $description         = test_input($_POST["description"]);
 
-    //Check if GEN doc is properly defined
+    //Check if GEN doc is properly defined..
     if ($_POST["project_entity"] === "GEN" and $_POST["project_year"] != "N/A" and $_POST["project_number"] != "N/A")    {$total_doc_numberErr     .= "If Project = GEN, year and projectnumber should be N/A.";}
 
     //Check if Project number_format exists
