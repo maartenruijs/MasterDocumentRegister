@@ -1,0 +1,213 @@
+﻿/* Style the table */
+.table {
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 20px;
+    border: 10px
+}
+
+    .table td, .table th {
+        text-align: left;
+    }
+
+/* Style the buttons that are used to open and close the accordion panel */
+.accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    outline: none;
+    transition: 0.4s;
+}
+
+.accordion_active {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    outline: none;
+    transition: 0.4s;
+}
+
+.accordion:after {
+    content: '\02795'; /* Unicode character for "plus" sign (+) */
+    font-size: 13px;
+    color: #777;
+    float: right;
+    margin-left: 5px;
+}
+.accordion_active:after {
+    font-size: 13px;
+    color: #777;
+    float: right;
+    margin-left: 5px;
+    content: "\2796"; /* Unicode character for "minus" sign (-) */
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+    .accordion_active, .accordion:hover {
+    background-color: #ccc;
+}
+
+.panel {
+    padding: 0 18px;
+    background-color: white;
+    display: none;
+    overflow: scroll;
+}
+
+.panel_active {
+    display: table-row;
+}
+
+.error {
+    color: #FF0000;
+}
+
+footer {
+    display: block;
+    text-align: center;
+}
+
+div.header {
+    display: inline-block;
+    height: 90px;
+    text-align: center;
+    vertical-align: middle;
+    padding: 5px 100px;
+    text-transform: uppercase;
+    color: #262626;
+}
+div.container {
+    margin: 0 auto;
+    overflow: hidden;
+    text-align: center;
+}
+
+img.logo {
+    height: 90px;
+}
+
+#div_aside {
+    float: right;
+    background: yellow;
+    width: 20%;
+    border-width: 10px;
+    min-height: 80%;
+}
+
+#main {
+    background: orange;
+    border-width: 10px;
+    width: 80%;
+    min-height: 80%;
+}
+
+.nav ul {
+    list-style: none;
+    background-color: #444;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+}
+
+.nav li {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.2em;
+    line-height: 40px;
+    height: 40px;
+    border-bottom: 1px solid #888;
+}
+
+.nav a {
+    text-decoration: none;
+    color: #fff;
+    display: block;
+    transition: .3s background-color;
+}
+
+    .nav a:hover {
+        background-color: #005f5f;
+    }
+
+    .nav a.active {
+        background-color: #fff;
+        color: #444;
+        cursor: default;
+    }
+
+@media screen and (min-width: 600px) {
+    .nav li {
+        width: 200px;
+        border-bottom: none;
+        height: 50px;
+        line-height: 50px;
+        font-size: 1.4em;
+    }
+
+    .nav li {
+        display: inline-block;
+        margin-right: -4px;
+    }
+}
+
+select.numtable {
+    width: 50px;
+}
+
+#projects_table_form {
+    background: green;
+}
+
+#table_mod {
+    float: right;
+    background: red;
+}
+
+#projects_title {
+    background: purple;
+}
+
+.btn-group, .float_right {
+    float: right;
+}
+
+btn {
+    display: inline-block;
+    border-radius: 6px;
+    border: 1px solid #d83526;
+}
+
+i {
+    border: solid black;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+}
+
+    i.none {
+        transform: rotate(135deg);
+        -webkit-transform: rotate(135deg);
+    }
+
+    i.asc {
+        transform: rotate(-135deg);
+        -webkit-transform: rotate(-135deg);
+    }
+
+    i.desc {
+        transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
+    }
+
+.invis {
+    width: 50px;
+    visibility: hidden;
+}

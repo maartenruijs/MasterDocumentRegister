@@ -1,0 +1,61 @@
+﻿<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Name>MasterDocumentRegister</Name>
+    <ProjectGuid>7c40836e-e07c-43bd-b8c2-18a567070bcc</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>
+    </RootNamespace>
+    <ProjectTypeGuids>{A0786B88-2ADB-4C21-ABE8-AA2D79766269}</ProjectTypeGuids>
+    <AssemblyName>MasterDocumentRegister</AssemblyName>
+    <SpecificPageValue>index.php</SpecificPageValue>
+    <StartAction>SpecificPage</StartAction>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <IncludeDebugInformation>true</IncludeDebugInformation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <IncludeDebugInformation>false</IncludeDebugInformation>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="add_project.php" />
+    <Compile Include="add_project_success.php" />
+    <Compile Include="divs\div_add_project.php" />
+    <Compile Include="divs\div_add_doc.php" />
+    <Compile Include="correspondence.php" />
+    <Compile Include="divs\div_add_project_success.php" />
+    <Compile Include="divs\div_aside1.php" />
+    <Compile Include="divs\div_correspondence.php" />
+    <Compile Include="divs\div_documents.php" />
+    <Compile Include="divs\div_projects.php" />
+    <Compile Include="divs\div_transmittals.php" />
+    <Compile Include="documents.php" />
+    <Compile Include="add_doc_success.php" />
+    <Compile Include="add_doc.php" />
+    <Compile Include="mains\main_aside.php" />
+    <Compile Include="other\connection.php" />
+    <Compile Include="divs\div_dashboard.php" />
+    <Compile Include="index.php" />
+    <Compile Include="mains\main_footer.php" />
+    <Compile Include="mains\main_header.php" />
+    <Compile Include="mains\main_navigation.php" />
+    <Compile Include="projects.php" />
+    <Compile Include="transmittals.php" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="divs\div_add_doc_success.php" />
+    <Content Include="images\ExampleDashboard.png" />
+    <Content Include="images\ARC.png" />
+    <Content Include="scripts\jquery.min.js" />
+    <Content Include="scripts\script.js" />
+    <Content Include="scripts\style.css" />
+    <Content Include="images\OI.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="images\" />
+    <Folder Include="divs\" />
+    <Folder Include="mains\" />
+    <Folder Include="other\" />
+    <Folder Include="scripts\" />
+  </ItemGroup>
+</Project>
