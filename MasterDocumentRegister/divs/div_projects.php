@@ -158,18 +158,19 @@ $projects = performQuery($query2);
                 <tbody>
                     <?php foreach((array) $projects as $project):?>
                     <tr class="accordion" onclick="openAccordion(this)">
-                        <?php foreach($project_columns as $project_column) {echo '<td>'.$project[$project_column[0]].'</td>'; } ?>
+                        <?php foreach($project_columns as $project_column) {echo '<td>'.$project[$project_column[0]].'</td>'; }; ?>
+                        <td>
+                            <div class="btn-group" data-toggle="buttons">
+                                <a href="javascript:alert('functionality not yet included');" class="btn btn-edit">Edit</a>
+                                <a href="javascript:alert('functionality not yet included');" class="btn btn-delete">Delete</a>
+                            </div>
+                        </td>
                     </tr>
                     <tr class="panel">
                         <td colspan="<?php echo count($project_columns);?>">
                             <?php echo $project['long_description'] ?>
                         </td>
                         <td>
-                            <div class="btn-group" data-toggle="buttons">
-                                <a href="#" class="btn btn-edit">Edit Project Details</a>
-                                <a href="javascript:alert('functionality not yet included');" class="btn btn-goto">Goto Project Folder</a>
-                                <a href="javascript:alert('functionality not yet included');" class="btn btn-delete">Delete Project</a>
-                            </div>
                         </td>
                     </tr><?php endforeach;?>
                 </tbody>

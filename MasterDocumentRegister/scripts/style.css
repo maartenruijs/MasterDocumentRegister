@@ -179,12 +179,31 @@ select.numtable {
     float: right;
 }
 
-btn {
+.btn {
+    color: white;
+    padding: 1px 10px;
+    text-align: center;
+    text-decoration: none;
     display: inline-block;
+    font-size: 16px;
     border-radius: 6px;
     border: 1px solid #d83526;
+    border-color: white;
 }
 
+.btn-edit {
+    background-color: #4CAF50; /* Green */
+}
+
+.btn-delete {
+    background-color: #ff0000; /* Red */
+}
+
+.btn-addRev {
+    background-color: #0066ff; /* Blue */
+}
+
+/* order of table triangle */
 i {
     border: solid black;
     border-width: 0 3px 3px 0;

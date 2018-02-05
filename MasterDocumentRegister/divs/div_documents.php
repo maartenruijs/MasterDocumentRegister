@@ -171,9 +171,9 @@ $docs = performQuery($query2);
                         <?php foreach($doc_columns as $doc_column) {echo '<td>'.$doc[$doc_column[0]].'</td>'; } ?>
                         <td>
                             <div class="btn-group" data-toggle="buttons">
-                                <a href="#" target="_blank" class="btn btn-edit">Edit</a>
-                                <a href="#" target="_blank" class="btn btn-delete">Delete</a>
-                                <a href="#" target="_blank" class="btn btn-view">View</a>
+                                <a href="javascript:alert('functionality not yet included');" target="_blank" class="btn btn-addRev">Add Rev</a>
+                                <a href="javascript:alert('functionality not yet included');" target="_blank" class="btn btn-edit">Edit</a>
+                                <a href="javascript:alert('functionality not yet included');" target="_blank" class="btn btn-delete">Delete</a>
                             </div>
                         </td>
                     </tr>
@@ -182,13 +182,19 @@ $docs = performQuery($query2);
                     $revs = performQuery($query3);
                     if (!empty($revs)) {
                         echo '<tr class="panel">';
-                        foreach($rev_columns as $rev_column) {echo '<th>'.$rev_column[1].'</th>';}
+                            foreach($rev_columns as $rev_column) {echo '<th>'.$rev_column[1].'</th>';}
                         echo '</tr>';
                         foreach((array) $revs as $rev){
                             echo '<tr class="panel">';
-                            foreach($rev_columns as $rev_column) {
-                                echo '<td>'.$rev[$rev_column[0]].'</td>';
-                            };
+                                foreach($rev_columns as $rev_column) {
+                                    echo '<td>'.$rev[$rev_column[0]].'</td>';
+                                };
+                                echo '<td></td><td>';
+                                    echo '<div class="btn-group" data-toggle="buttons">';
+                                        echo '<a href="#" target="_blank" class="btn btn-edit">Edit</a>';
+                                        echo '<a href="#" target="_blank" class="btn btn-delete">Delete</a>';
+                                    echo '</div>';
+                                echo '</td>';
                             echo '</tr>';
                         };
                     } else {
