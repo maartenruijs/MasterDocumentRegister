@@ -134,34 +134,35 @@ $docs = performQuery($query2);
                 <thead>
 					<tr>
                         <?php foreach($doc_columns as $col) {echo '<th class="'.$col[6].'">'.$col[1].str_repeat('&nbsp;', 1).'<i class="'.$col[4].'" id="order_'.$col[0].'"></i><input type="text" class="invis" id="order_inp_'.$col[0].'" name="order_inp_'.$col[0].'" value="'.$col[4].'"><input type="text" class="invis" id="order_num_'.$col[0].'" name="order_num_'.$col[0].'" value="'.$col[5].'"></th>';} ?>
-						<th class="float_right">
-							# Documents per page:
-							<select class="numtable" name="num_rows_docs" onchange="this.form.submit();"><?php foreach($pagenum_options as $num) {echo '<option value="'.$num.'" '.(($num_rows_sel == $num) ? 'selected' : "").'>'.$num.'</option>';} ?>
-							</select>
-						</th>
+						<th class="float_right" colspan="2">Docs per page:</th>
+						<th><select class="numtable" name="num_rows_docs" onchange="this.form.submit();"><?php foreach($pagenum_options as $num) {echo '<option value="'.$num.'" '.(($num_rows_sel == $num) ? 'selected' : "").'>'.$num.'</option>';} ?></select></th>
 					</tr>
                     <tr>
                         <?php foreach($doc_columns as $col) {
                                   echo '<th>';
                                   if($col[2] == 'select')  {
-                                      echo '<select name="filter_'.$col[0].'" onchange="this.form.submit();">';
+                                      echo '<select class="full_width" name="filter_'.$col[0].'" onchange="this.form.submit();">';
                                       foreach($col[7] as $option){
                                           echo '<option value="'.$option.'" '.(($col[3] == $option) ? 'selected' : "").'>'.$option.'</option>';
                                       }
                                       echo '</select>';
                                   } elseif ($col[2] == 'text'){
-                                      echo '<input type="text" name="filter_'.$col[0].'" value="'.$col[3].'" onchange="this.form.submit();">';
+                                      echo '<input class="full_width" type="text" name="filter_'.$col[0].'" value="'.$col[3].'" onchange="this.form.submit();">';
                                   };
                                   echo '</th>';
                               };?>
                         <th class="float_right">
-                            <button onclick="firstPage();">&laquo; First</button>
-                            <button onclick="prevPage(<?php echo $pagenum_sel ?>);">&lsaquo; Prev</button>
+                            <button onclick="firstPage();">&laquo;</button>
+                            <button onclick="prevPage(<?php echo $pagenum_sel ?>);">&lsaquo;</button>
+                        </th>
+                        <th>
                             <select id="sel_pagenum" class="numtable" name="pagenum_docs" onchange="this.form.submit();">
                                 <?php foreach(range(1, $max_pagenum_docs) as $num) {echo '<option value="'.$num.'" '.(($pagenum_sel == $num) ? 'selected' : "").'>'.$num.'</option>';} ?>
                             </select>
-                            <button onclick="nextPage(<?php echo $pagenum_sel.', '.$max_pagenum_docs ?>);">Next &rsaquo;</button>
-                            <button onclick="LastPage(<?php echo $max_pagenum_docs ?>);">Last &raquo;</button>
+                        </th>
+                        <th>
+                            <button onclick="nextPage(<?php echo $pagenum_sel.', '.$max_pagenum_docs ?>);">&rsaquo;</button>
+                            <button onclick="LastPage(<?php echo $max_pagenum_docs ?>);"> &raquo;</button>
                         </th>
                     </tr>
                 </thead>
@@ -169,13 +170,9 @@ $docs = performQuery($query2);
                     <?php foreach((array) $docs as $doc):?>
                     <tr class="accordion" onclick="openAccordion(this)">
                         <?php foreach($doc_columns as $doc_column) {echo '<td>'.$doc[$doc_column[0]].'</td>'; } ?>
-                        <td class="btn_docs">
-                            <div class="btn-group" data-toggle="buttons">
-                                <a href="javascript:alert('functionality not yet included');" target="_blank" class="btn btn-addRev">Add Rev</a>
-                                <a href="javascript:alert('functionality not yet included');" target="_blank" class="btn btn-edit">Edit</a>
-                                <a href="javascript:alert('functionality not yet included');" target="_blank" class="btn btn-delete">Delete</a>
-                            </div>
-                        </td>
+                        <td><a href="javascript:alert('functionality not yet included');" target="_blank" class="btn btn-addRev">Add Rev</a></td>
+                        <td><a href="javascript:alert('functionality not yet included');" target="_blank" class="btn btn-edit">Edit</a></td>
+                        <td><a href="javascript:alert('functionality not yet included');" target="_blank" class="btn btn-delete">Delete</a></td>
                     </tr>
                     <?php
                     $query3 = "SELECT * FROM doc_revisions WHERE project_entity = '{$doc['project_entity']}' AND project_year = '{$doc['project_year']}' AND project_number = '{$doc['project_number']}' AND doc_discipline = '{$doc['doc_discipline']}' AND doc_type = '{$doc['doc_type']}' AND doc_number = '{$doc['doc_number']}'";
@@ -189,16 +186,13 @@ $docs = performQuery($query2);
                                 foreach($rev_columns as $rev_column) {
                                     echo '<td>'.$rev[$rev_column[0]].'</td>';
                                 };
-                                echo '<td></td><td>';
-                                    echo '<div class="btn-group" data-toggle="buttons">';
-                                        echo '<a href="#" target="_blank" class="btn btn-edit">Edit</a>';
-                                        echo '<a href="#" target="_blank" class="btn btn-delete">Delete</a>';
-                                    echo '</div>';
-                                echo '</td>';
+                                echo '<td><a href="#" target="_blank" class="btn btn-link">Link</a></td>';
+                                echo '<td><a href="#" target="_blank" class="btn btn-edit">Edit</a></td>';
+                                echo '<td><a href="#" target="_blank" class="btn btn-delete">Delete</a></td>';
                             echo '</tr>';
                         };
                     } else {
-                        echo '<tr class="panel"><td colspan="100">No revisions in database</td></tr>';
+                        echo '<tr class="panel"><td colspan="9">No revisions in database</td></tr>';
                     };
                     ?>
                     <?php endforeach;?>

@@ -123,9 +123,8 @@ $projects = performQuery($query2);
                 <thead>
                     <tr>
                         <?php foreach($project_columns as $col) {echo '<th class="'.$col[6].'">'.$col[1].str_repeat('&nbsp;', 1).'<i class="'.$col[4].'" id="order_'.$col[0].'"></i><input type="text" class="invis" id="order_inp_'.$col[0].'" name="order_inp_'.$col[0].'" value="'.$col[4].'"><input type="text" class="invis" id="order_num_'.$col[0].'" name="order_num_'.$col[0].'" value="'.$col[5].'"></th>';} ?>
-                        <th class="float_right">
-                            # Projects per page:
-                            <select class="numtable" name="num_rows_projects" onchange="this.form.submit();">
+                        <th class="float_right" colspan="2"># Projects per page:</th>
+                        <th><select class="numtable" name="num_rows_projects" onchange="this.form.submit();">
                                 <?php foreach($pagenum_options as $num) {echo '<option value="'.$num.'" '.(($num_rows_sel == $num) ? 'selected' : "").'>'.$num.'</option>';} ?>
                             </select>
                         </th>
@@ -134,24 +133,28 @@ $projects = performQuery($query2);
                         <?php foreach($project_columns as $col) {
                             echo '<th>';
                             if($col[2] == 'select')  {
-                                echo '<select name="filter_'.$col[0].'" onchange="this.form.submit();">';
+                                echo '<select class="full_width" name="filter_'.$col[0].'" onchange="this.form.submit();">';
                                 foreach($col[7] as $option){
                                     echo '<option value="'.$option.'" '.(($col[3] == $option) ? 'selected' : "").'>'.$option.'</option>';
                                 }
                                 echo '</select>';
                             } elseif ($col[2] == 'text'){
-                                echo '<input type="text" name="filter_'.$col[0].'" value="'.$col[3].'" onchange="this.form.submit();">';
+                                echo '<input class="full_width" type="text" name="filter_'.$col[0].'" value="'.$col[3].'" onchange="this.form.submit();">';
                             };
                             echo '</th>';
                         };?>
                         <th>
-                            <button onclick="firstPage();">&laquo; First</button>
-                            <button onclick="prevPage(<?php echo $pagenum_sel ?>);">&lsaquo; Prev</button>
+                            <button onclick="firstPage();">&laquo;</button>
+                            <button onclick="prevPage(<?php echo $pagenum_sel ?>);">&lsaquo;</button>
+                        </th>
+                        <th>
                             <select id="sel_pagenum" class="numtable" name="pagenum_projects" onchange="this.form.submit();">
                                 <?php foreach(range(1, $max_pagenum_projects) as $num) {echo '<option value="'.$num.'" '.(($pagenum_sel == $num) ? 'selected' : "").'>'.$num.'</option>';} ?>
                             </select>
-                            <button onclick="nextPage(<?php echo $pagenum_sel.', '.$max_pagenum_projects ?>);">Next &rsaquo;</button>
-                            <button onclick="LastPage(<?php echo $max_pagenum_projects ?>);">Last &raquo;</button>
+                        </th>
+                        <th>
+                            <button onclick="nextPage(<?php echo $pagenum_sel.', '.$max_pagenum_projects ?>);">&rsaquo;</button>
+                            <button onclick="LastPage(<?php echo $max_pagenum_projects ?>);">&raquo;</button>
                         </th>
                     </tr>
                 </thead>
@@ -159,12 +162,9 @@ $projects = performQuery($query2);
                     <?php foreach((array) $projects as $project):?>
                     <tr class="accordion" onclick="openAccordion(this)">
                         <?php foreach($project_columns as $col) {echo '<td>'.$project[$col[0]].'</td>'; }; ?>
-                        <td class="btn_projects">
-                            <div class="btn-group" data-toggle="buttons">
-                                <a href="javascript:alert('functionality not yet included');" class="btn btn-edit">Edit</a>
-                                <a href="javascript:alert('functionality not yet included');" class="btn btn-delete">Delete</a>
-                            </div>
-                        </td>
+                        <td></td>
+                        <td><a href="javascript:alert('functionality not yet included');" class="btn btn-edit">Edit</a></td>
+                        <td><a href="javascript:alert('functionality not yet included');" class="btn btn-delete">Delete</a></td>
                     </tr>
                     <tr class="panel">
                         <td colspan="<?php echo count($project_columns);?>">

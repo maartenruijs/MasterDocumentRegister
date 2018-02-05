@@ -10,6 +10,10 @@
         text-align: left;
     }
 
+.full_width {
+    width: 100%;
+}
+
 .entity, .year, .disc, .doc_type {
     width: 60px;
     white-space: nowrap;
@@ -25,7 +29,7 @@
     white-space: nowrap;
 }
 
-sh_descr, .doc_name, .client_doc_number {
+.sh_descr, .doc_name, .client_doc_number {
     width: 250px;
     white-space: nowrap;
 }
@@ -208,17 +212,13 @@ select.numtable {
     background: purple;
 }
 
-.btn-group {
-    float: right;
-}
-
 .btn {
     color: white;
     padding: 1px 10px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
+    font-size: 10px;
     border-radius: 6px;
     border: 1px solid #d83526;
     border-color: white;
@@ -232,7 +232,7 @@ select.numtable {
     background-color: #ff0000; /* Red */
 }
 
-.btn-addRev {
+.btn-addRev, .btn-link {
     background-color: #0066ff; /* Blue */
 }
 
