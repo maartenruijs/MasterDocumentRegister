@@ -1,14 +1,14 @@
 <?php
 $doc_columns = array(
-    array('project_entity', 'Entity', 'select', "", 'none', ""),
-    array('project_year', 'Year', 'select', "", 'none', ""),
-    array('project_number', 'Number', 'select', "", 'none', ""),
-    array('doc_discipline', 'Discipline', 'select', "", 'none', ""),
-    array('doc_type', 'Doc Type', 'select', "", 'none', ""),
-    array('doc_number', 'Doc number', 'select', "", 'none', ""),
-    array('doc_name', 'Doc Name', 'text', "", 'none', ""),
-    array('client_doc_number', 'Client Doc number', 'text', "", 'none', ""),
-    array('description', 'Detailed Description', 'text', "", 'none', ""));
+    array('project_entity', 'Entity', 'select', "", 'none', "", 'entity'),
+    array('project_year', 'Year', 'select', "", 'none', "", 'year'),
+    array('project_number', 'Number', 'select', "", 'none', "", 'pr_num'),
+    array('doc_discipline', 'Discipline', 'select', "", 'none', "", 'disc'),
+    array('doc_type', 'Doc Type', 'select', "", 'none', "", 'doc_type'),
+    array('doc_number', 'Doc number', 'select', "", 'none', "", 'doc_num'),
+    array('doc_name', 'Doc Name', 'text', "", 'none', "", 'doc_name'),
+    array('client_doc_number', 'Client Doc number', 'text', "", 'none', "", 'client_doc_number'),
+    array('description', 'Detailed Description', 'text', "", 'none', "", 'long_description'));
 $rev_columns = array(
     array('project_entity', 'Entity'),
     array('project_year', 'Year'),
@@ -112,7 +112,7 @@ foreach($doc_columns as $col) {
         $temp = array_unique(pg_fetch_all_columns($res, pg_field_num($res, $col[0])));
         asort($temp);
         array_unshift($temp, "");
-        $doc_columns[$k][6] = $temp;
+        $doc_columns[$k][7] = $temp;
     };
     $k++;
 };
@@ -133,7 +133,7 @@ $docs = performQuery($query2);
             <table id="doc_grid" class="table">
                 <thead>
 					<tr>
-                        <?php foreach($doc_columns as $col) {echo '<th>'.$col[1].str_repeat('&nbsp;', 4).'<i class="'.$col[4].'" id="order_'.$col[0].'"></i><input type="text" class="invis" id="order_inp_'.$col[0].'" name="order_inp_'.$col[0].'" value="'.$col[4].'"><input type="text" class="invis" id="order_num_'.$col[0].'" name="order_num_'.$col[0].'" value="'.$col[5].'"></th>';} ?>
+                        <?php foreach($doc_columns as $col) {echo '<th class="'.$col[6].'">'.$col[1].str_repeat('&nbsp;', 1).'<i class="'.$col[4].'" id="order_'.$col[0].'"></i><input type="text" class="invis" id="order_inp_'.$col[0].'" name="order_inp_'.$col[0].'" value="'.$col[4].'"><input type="text" class="invis" id="order_num_'.$col[0].'" name="order_num_'.$col[0].'" value="'.$col[5].'"></th>';} ?>
 						<th class="float_right">
 							# Documents per page:
 							<select class="numtable" name="num_rows_docs" onchange="this.form.submit();"><?php foreach($pagenum_options as $num) {echo '<option value="'.$num.'" '.(($num_rows_sel == $num) ? 'selected' : "").'>'.$num.'</option>';} ?>
@@ -145,7 +145,7 @@ $docs = performQuery($query2);
                                   echo '<th>';
                                   if($col[2] == 'select')  {
                                       echo '<select name="filter_'.$col[0].'" onchange="this.form.submit();">';
-                                      foreach($col[6] as $option){
+                                      foreach($col[7] as $option){
                                           echo '<option value="'.$option.'" '.(($col[3] == $option) ? 'selected' : "").'>'.$option.'</option>';
                                       }
                                       echo '</select>';
@@ -169,7 +169,7 @@ $docs = performQuery($query2);
                     <?php foreach((array) $docs as $doc):?>
                     <tr class="accordion" onclick="openAccordion(this)">
                         <?php foreach($doc_columns as $doc_column) {echo '<td>'.$doc[$doc_column[0]].'</td>'; } ?>
-                        <td>
+                        <td class="btn_docs">
                             <div class="btn-group" data-toggle="buttons">
                                 <a href="javascript:alert('functionality not yet included');" target="_blank" class="btn btn-addRev">Add Rev</a>
                                 <a href="javascript:alert('functionality not yet included');" target="_blank" class="btn btn-edit">Edit</a>

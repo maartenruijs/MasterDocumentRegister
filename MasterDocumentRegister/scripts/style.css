@@ -1,16 +1,49 @@
 ﻿/* Style the table */
 .table {
-    border-collapse: collapse;
+    /*border-collapse: collapse;*/
     width: 100%;
     max-width: 100%;
-    margin-bottom: 20px;
-    border: 10px
+    border: 10px;
+    table-layout: fixed;
 }
-
     .table td, .table th {
         text-align: left;
     }
 
+.entity, .year, .disc, .doc_type {
+    width: 60px;
+    white-space: nowrap;
+}
+
+.pr_num, .doc_num {
+    width: 70px;
+    white-space: nowrap;
+}
+
+.client {
+    width: 200px;
+    white-space: nowrap;
+}
+
+sh_descr, .doc_name, .client_doc_number {
+    width: 250px;
+    white-space: nowrap;
+}
+
+.status, .doc_num {
+    width: 100px;
+    white-space: nowrap;
+}
+
+.btn_projects, .btn_docs {
+    width: 200px;
+    white-space: nowrap;
+}
+
+.long_description {
+    width: 300px;
+    white-space: nowrap;
+}
 /* Style the buttons that are used to open and close the accordion panel */
 .accordion {
     background-color: #eee;
@@ -175,7 +208,7 @@ select.numtable {
     background: purple;
 }
 
-.btn-group, .float_right {
+.btn-group {
     float: right;
 }
 

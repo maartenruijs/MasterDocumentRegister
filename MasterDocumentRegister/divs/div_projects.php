@@ -1,12 +1,12 @@
 <?php
 //define columns in_array table
 $project_columns = array(
-    array('project_entity', 'Entity', 'select', "", 'none', ""),
-    array('project_year', 'Year', 'select', "", 'none', ""),
-    array('project_number', 'Number', 'select', "", 'none', ""),
-    array('client', 'Client', 'text', "", 'none', ""),
-    array('short_description', 'Description', 'text', "", 'none', ""),
-    array('status', 'Status', 'select', "", 'none', ""));
+    array('project_entity', 'Entity', 'select', "", 'none', "", 'entity'),
+    array('project_year', 'Year', 'select', "", 'none', "", 'year'),
+    array('project_number', 'Number', 'select', "", 'none', "", 'pr_num'),
+    array('client', 'Client', 'text', "", 'none', "", 'client'),
+    array('short_description', 'Description', 'text', "", 'none', "", 'sh_descr'),
+    array('status', 'Status', 'select', "", 'none', "", 'status'));
 
 $num_rows_sel = 20;
 $pagenum_sel = 1;
@@ -101,7 +101,7 @@ foreach($project_columns as $col) {
         $temp = array_unique(pg_fetch_all_columns($res, pg_field_num($res, $col[0])));
         asort($temp);
         array_unshift($temp, "");
-        $project_columns[$k][6] = $temp;
+        $project_columns[$k][7] = $temp;
     };
     $k++;
 };
@@ -122,7 +122,7 @@ $projects = performQuery($query2);
             <table id="project_grid" class="table">
                 <thead>
                     <tr>
-                        <?php foreach($project_columns as $col) {echo '<th>'.$col[1].str_repeat('&nbsp;', 4).'<i class="'.$col[4].'" id="order_'.$col[0].'"></i><input type="text" class="invis" id="order_inp_'.$col[0].'" name="order_inp_'.$col[0].'" value="'.$col[4].'"><input type="text" class="invis" id="order_num_'.$col[0].'" name="order_num_'.$col[0].'" value="'.$col[5].'"></th>';} ?>
+                        <?php foreach($project_columns as $col) {echo '<th class="'.$col[6].'">'.$col[1].str_repeat('&nbsp;', 1).'<i class="'.$col[4].'" id="order_'.$col[0].'"></i><input type="text" class="invis" id="order_inp_'.$col[0].'" name="order_inp_'.$col[0].'" value="'.$col[4].'"><input type="text" class="invis" id="order_num_'.$col[0].'" name="order_num_'.$col[0].'" value="'.$col[5].'"></th>';} ?>
                         <th class="float_right">
                             # Projects per page:
                             <select class="numtable" name="num_rows_projects" onchange="this.form.submit();">
@@ -135,7 +135,7 @@ $projects = performQuery($query2);
                             echo '<th>';
                             if($col[2] == 'select')  {
                                 echo '<select name="filter_'.$col[0].'" onchange="this.form.submit();">';
-                                foreach($col[6] as $option){
+                                foreach($col[7] as $option){
                                     echo '<option value="'.$option.'" '.(($col[3] == $option) ? 'selected' : "").'>'.$option.'</option>';
                                 }
                                 echo '</select>';
@@ -144,7 +144,7 @@ $projects = performQuery($query2);
                             };
                             echo '</th>';
                         };?>
-                        <th class="float_right">
+                        <th>
                             <button onclick="firstPage();">&laquo; First</button>
                             <button onclick="prevPage(<?php echo $pagenum_sel ?>);">&lsaquo; Prev</button>
                             <select id="sel_pagenum" class="numtable" name="pagenum_projects" onchange="this.form.submit();">
@@ -158,8 +158,8 @@ $projects = performQuery($query2);
                 <tbody>
                     <?php foreach((array) $projects as $project):?>
                     <tr class="accordion" onclick="openAccordion(this)">
-                        <?php foreach($project_columns as $project_column) {echo '<td>'.$project[$project_column[0]].'</td>'; }; ?>
-                        <td>
+                        <?php foreach($project_columns as $col) {echo '<td>'.$project[$col[0]].'</td>'; }; ?>
+                        <td class="btn_projects">
                             <div class="btn-group" data-toggle="buttons">
                                 <a href="javascript:alert('functionality not yet included');" class="btn btn-edit">Edit</a>
                                 <a href="javascript:alert('functionality not yet included');" class="btn btn-delete">Delete</a>
