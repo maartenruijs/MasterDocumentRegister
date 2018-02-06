@@ -20,6 +20,8 @@
   <ItemGroup>
     <Compile Include="add_project.php" />
     <Compile Include="add_project_success.php" />
+    <Compile Include="add_rev.php" />
+    <Compile Include="add_rev_success.php" />
     <Compile Include="divs\div_add_project.php" />
     <Compile Include="divs\div_add_doc.php" />
     <Compile Include="correspondence.php" />
