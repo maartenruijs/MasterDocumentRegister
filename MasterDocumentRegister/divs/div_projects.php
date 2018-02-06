@@ -79,7 +79,7 @@ if(!empty($order)) {
 
 // Select query to determine number of rows and input for filters
 $query1 = "SELECT * FROM projects {$string_conditions};";
-$res = performQueryCOUNT($query1);
+$res = performQuery($query1);
 
 //Determine number of rows, maximum number of pages and input for select options
 $count = pg_num_rows($res);
@@ -109,7 +109,8 @@ foreach($project_columns as $col) {
 // Retrieve final table to be presented
 $offset = ($pagenum_sel - 1) * $num_rows_sel;
 $query2 = "SELECT * FROM projects {$string_conditions} {$string_order} OFFSET '{$offset}' LIMIT '{$num_rows_sel}' ;";
-$projects = performQuery($query2);
+$data = performQuery($query2);
+$projects = pg_fetch_all($data);
 
 ?>
 <div id="Projects" class="tabcontent">

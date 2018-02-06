@@ -90,7 +90,7 @@ if(!empty($order)) {
 
 // Select query to determine number of rows and input for filters
 $query1 = "SELECT * FROM documents {$string_conditions};";
-$res = performQueryCOUNT($query1);
+$res = performQuery($query1);
 
 //Determine number of rows, maximum number of pages and input for select options
 $count = pg_num_rows($res);
@@ -120,7 +120,8 @@ foreach($doc_columns as $col) {
 // Retrieve final table to be presented
 $offset = ($pagenum_sel - 1) * $num_rows_sel;
 $query2 = "SELECT * FROM documents {$string_conditions} {$string_order} OFFSET '{$offset}' LIMIT '{$num_rows_sel}' ;";
-$docs = performQuery($query2);
+$data = performQuery($query2);
+$docs = pg_fetch_all($data);
 ?>
 
 <div id="docs" class="tabcontent">
@@ -176,7 +177,8 @@ $docs = performQuery($query2);
                     </tr>
                     <?php
                     $query3 = "SELECT * FROM doc_revisions WHERE project_entity = '{$doc['project_entity']}' AND project_year = '{$doc['project_year']}' AND project_number = '{$doc['project_number']}' AND doc_discipline = '{$doc['doc_discipline']}' AND doc_type = '{$doc['doc_type']}' AND doc_number = '{$doc['doc_number']}'";
-                    $revs = performQuery($query3);
+                    $data = performQuery($query3);
+                    $revs = pg_fetch_all($data);
                     if (!empty($revs)) {
                         echo '<tr class="panel">';
                             foreach($rev_columns as $rev_column) {echo '<th>'.$rev_column[1].'</th>';}
