@@ -72,14 +72,35 @@ function determine_pagenum_options($num_rows) {
 };
 
 // Determine input for select filters
-function sel_input($input_array_columns, $table) {
+function sel_input($input_array_columns, $table_full) {
     $k = 0;
     foreach($input_array_columns as $col) {
         if($col[2] == 'select') {
-            $temp = array_unique(pg_fetch_all_columns($table, pg_field_num($table, $col[0])));
-            asort($temp);
-            array_unshift($temp, "");
-            $input_array_columns[$k][7] = $temp;
+            $select_options_full = array_unique(pg_fetch_all_columns($table_full, pg_field_num($table_full, $col[0])));
+            asort($select_options_full);
+            array_unshift($select_options_full, "");
+            $input_array_columns[$k][7] = $select_options_full;
+        };
+        $k++;
+    };
+    return $input_array_columns;
+};
+
+// Enable / Disable select input based on availability influenced by other filters
+function disable_input($input_array_columns, $table_cond) {
+    $k = 0;
+    foreach((array) $input_array_columns as $col) {
+        if($col[2] == 'select') {
+            $select_options_cond = array_unique(pg_fetch_all_columns($table_cond, pg_field_num($table_cond, $col[0])));
+            $enable_disable = [];
+            foreach((array) $input_array_columns[$k][7] as $option) {
+                if((in_array($option, $select_options_cond) or !$option)) {
+                    array_push($enable_disable, "enabled");
+                } else {
+                    array_push($enable_disable, "disabled");
+                };
+            };
+            $input_array_columns[$k][8] = $enable_disable;
         };
         $k++;
     };
@@ -99,4 +120,33 @@ function order_js($input_array_colums, $table_name) {
     };
 };
 
+function table_headings($input_array_colums) {
+    foreach($input_array_colums as $col) {
+        echo '<th class="'.$col[6].'">'.$col[1].str_repeat('&nbsp;', 1).'<i class="'.$col[4].'" id="order_'.$col[0].'"></i><input type="text" class="invis" id="order_inp_'.$col[0].'" name="order_inp_'.$col[0].'" value="'.$col[4].'"><input type="text" class="invis" id="order_num_'.$col[0].'" name="order_num_'.$col[0].'" value="'.$col[5].'"></th>';}
+};
+
+function select_number_rows_per_page($pagenum_options, $num_rows_sel) {
+    echo '<select class="numtable" name="num_rows" onchange="this.form.submit();">';
+    foreach($pagenum_options as $num) {
+        echo '<option value="'.$num.'" '.(($num_rows_sel == $num) ? 'selected' : "").'>'.$num.'</option>';
+    };
+    echo '</select>';
+};
+
+function table_filters($input_array_colums) {
+    foreach($input_array_colums as $col) {
+        echo '<th>';
+        if($col[2] == 'select')  {
+            echo '<select class="full_width" name="filter_'.$col[0].'" onchange="this.form.submit();">';
+            $i = 0;
+            for($i = 0; $i < count($col[7]); $i++){
+                echo '<option id = "option_'.$col[8][$i].'" value="'.$col[7][$i].'" '.(($col[3] == $col[7][$i]) ? 'selected' : "").'>'.$col[7][$i].'</option>';
+            };
+            echo '</select>';
+        } elseif ($col[2] == 'text'){
+            echo '<input class="full_width" type="text" name="filter_'.$col[0].'" value="'.$col[3].'" onchange="this.form.submit();">';
+        };
+        echo '</th>';
+    };
+};
 ?>

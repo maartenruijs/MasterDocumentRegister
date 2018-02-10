@@ -263,3 +263,7 @@ i {
     width: 50px;
     visibility: hidden;
 }
+
+#option_disabled {
+    color: grey;
+}
