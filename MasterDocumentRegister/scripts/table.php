@@ -86,4 +86,17 @@ function sel_input($input_array_columns, $table) {
     return $input_array_columns;
 };
 
+//Create onclick javascript functions for order of table
+function order_js($input_array_colums, $table_name) {
+    foreach($input_array_colums as $col) {
+        echo "$('#order_".$col[0]."').click(function () {";
+        echo "modify_order('order_inp_".$col[0]."');";
+        foreach($input_array_colums as $col2) {
+            echo "modify_order_of_orderinput('order_num_".$col[0]."', 'order_num_".$col2[0]."' , 'order_inp_".$col2[0]."');";
+        };
+        echo "$('#".$table_name."_table_form').submit();";
+        echo "});";
+    };
+};
+
 ?>

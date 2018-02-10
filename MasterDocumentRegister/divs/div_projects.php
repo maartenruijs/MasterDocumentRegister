@@ -122,14 +122,7 @@ $projects = pg_fetch_all($data);
 </div>
 
 <script type="text/javascript">
-    <?php foreach($project_columns as $col): ?>
-    $('#order_<?php echo $col[0]; ?>').click(function () {
-        modify_order('order_inp_<?php echo $col[0]; ?>');
-            <?php foreach($project_columns as $col2){?>
-             modify_order_of_orderinput('order_num_<?php echo $col[0]; ?>', 'order_num_<?php echo $col2[0]; ?>' , 'order_inp_<?php echo $col2[0]; ?>');
-        <?php };?>
-        $('#<?php echo $table_name; ?>_table_form').submit();
-    });
-    <?php endforeach;?>
+    //Create onclick javascript functions for order of table
+    <?php order_js((array) $project_columns, $table_name) ?>
 </script>
 
