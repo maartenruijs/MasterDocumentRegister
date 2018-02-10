@@ -2,7 +2,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" type="text/css" href="./scripts/style.css" />
-    <script type="text/javascript" src="./scripts/script.js"></script>
+    <script type="text/javascript" src="../scripts/script.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <title>New Document Succesfully Created - Master Document Register - ARC-SES & Offshore Independents</title>
 </head>
