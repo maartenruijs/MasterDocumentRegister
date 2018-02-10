@@ -1,4 +1,5 @@
 <?php
+include "./scripts/connection.php";
 
 $total_project_numberErr = $project_entityErr = $project_yearErr = $project_numberErr = $clientErr = $short_descriptionErr = $statusErr = $long_descriptionErr = "";
 

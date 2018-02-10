@@ -1,25 +1,4 @@
-﻿//Function to open tabs
-/*function openTab(evt, tabName) {
-    // Declare all variables
-    var i, tabcontent, tablinks;
-
-    // Get all elements with class="tabcontent" and hide them
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
-
-    // Get all elements with class="tablinks" and remove the class "active"
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-
-    // Show the current tab, and add an "active" class to the button that opened the tab
-    document.getElementById(tabName).style.display = "block";
-    evt.currentTarget.className += " active";
-} */
-
+﻿//Function to open accordion
 function openAccordion(el) {
     $(el).toggleClass("accordion_active");
     $(el).toggleClass("accordion");
@@ -28,8 +7,7 @@ function openAccordion(el) {
         $(el).next().toggleClass("panel");
         el = $(el).next();
     }
-}
-
+};
 
 function changeEntity() {
     $(document).on('change', '[name="project_entity"]', function () {
@@ -43,7 +21,7 @@ function changeEntity() {
             $('[name="project_number"]').prop('disabled', false);
         };
     });
-}
+};
 
 function EnableBeforeSubmit() {
     document.getElementById('add_doc').addEventListener('submit', function () {
@@ -54,7 +32,7 @@ function EnableBeforeSubmit() {
             }
         }
     });
-}
+};
 
 function disableOnInitialization() {
     $(document).ready(function () {
@@ -63,8 +41,9 @@ function disableOnInitialization() {
             if ($('[name="project_number"]').val() == "N/A") { $('[name="project_number"]').prop('disabled', true); };
         };
     });
-}
+};
 
+// Increase pagenumber by 1
 function nextPage(pagenum, max_pagenum) {
     if ((pagenum + 1) > max_pagenum) {
         nextpage = pagenum;
@@ -72,13 +51,15 @@ function nextPage(pagenum, max_pagenum) {
         nextpage = pagenum + 1;
     };
     document.getElementById('sel_pagenum').value = nextpage;
-}
+};
 
+// Goto last page
 function LastPage(max_pagenum) {
     nextpage = max_pagenum;
     document.getElementById('sel_pagenum').value = nextpage;
-}
+};
 
+// Decrease pagenumber by 1
 function prevPage(pagenum) {
     if ((pagenum - 1) < 1) {
         nextpage = pagenum;
@@ -86,10 +67,34 @@ function prevPage(pagenum) {
         nextpage = pagenum - 1;
     };
     document.getElementById('sel_pagenum').value = nextpage;
-}
+};
 
+// Goto first page
 function firstPage() {
         nextpage = 1;
     document.getElementById('sel_pagenum').value = nextpage;
-}
+};
+
+function modify_order(inp_id) {
+	if (document.getElementById(inp_id).value == 'none') {
+		document.getElementById(inp_id).value = 'asc';
+	} else if (document.getElementById(inp_id).value == 'asc') {
+		document.getElementById(inp_id).value = 'desc';
+	} else if (document.getElementById(inp_id).value == 'desc') {
+		document.getElementById(inp_id).value = 'none';
+	};
+};
+
+function modify_order_of_orderinput(num_id1, num_id2, inp_id2) {
+	if (document.getElementById(num_id2).value != ""){
+		document.getElementById(num_id2).value = parseInt(document.getElementById(num_id2).value, 10) + 1;
+	};
+	if (num_id1 == num_id2) {
+		if (document.getElementById(inp_id2).value == 'none') {
+			document.getElementById(num_id2).value = "";
+		} else {
+			document.getElementById(num_id2).value = 1;
+		}; 
+	};
+};
 

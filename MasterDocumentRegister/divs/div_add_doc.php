@@ -1,4 +1,5 @@
 <?php
+include "./scripts/connection.php";
 
 $total_doc_numberErr = $project_entityErr = $project_yearErr = $project_numberErr = $doc_disciplineErr = $doc_typeErr = $doc_numberErr = $doc_nameErr = $client_doc_numberErr = $descriptionErr = "";
 
@@ -65,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Insert into database
     if($total_doc_numberErr == "" and $doc_nameErr == "") {
-        $query5 = "INSERT INTO documents (   
+        $query5 = "INSERT INTO documents (
                                 project_entity,
                                 project_year,
                                 project_number,

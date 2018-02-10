@@ -35,13 +35,14 @@
     <Compile Include="add_doc_success.php" />
     <Compile Include="add_doc.php" />
     <Compile Include="mains\main_aside.php" />
-    <Compile Include="other\connection.php" />
+    <Compile Include="scripts\connection.php" />
     <Compile Include="divs\div_dashboard.php" />
     <Compile Include="index.php" />
     <Compile Include="mains\main_footer.php" />
     <Compile Include="mains\main_header.php" />
     <Compile Include="mains\main_navigation.php" />
     <Compile Include="projects.php" />
+    <Compile Include="scripts\table.php" />
     <Compile Include="transmittals.php" />
   </ItemGroup>
   <ItemGroup>
@@ -57,7 +58,6 @@
     <Folder Include="images\" />
     <Folder Include="divs\" />
     <Folder Include="mains\" />
-    <Folder Include="other\" />
     <Folder Include="scripts\" />
   </ItemGroup>
 </Project>

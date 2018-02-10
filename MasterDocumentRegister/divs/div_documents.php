@@ -1,4 +1,7 @@
 <?php
+include "./scripts/connection.php";
+include "./scripts/table.php";
+
 $doc_columns = array(
     array('project_entity', 'Entity', 'select', "", 'none', "", 'entity'),
     array('project_year', 'Year', 'select', "", 'none', "", 'year'),
@@ -21,6 +24,7 @@ $rev_columns = array(
 
 $num_rows_sel = 20;
 $pagenum_sel = 1;
+$table_name = "documents";
 
 //Update when form is submitted (onchange!) and filters, amount of pages to show and pagenumber are updated
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -39,87 +43,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     };
 };
 
-// Create query string for conditions
-$string_conditions = '';
-foreach($doc_columns as $col) {
-    if(!($col[3] == "")) {
-        if ($col[2] == 'select') {
-            $i = '=';
-            $j = '';
-        } elseif($col[2] == 'text') {
-            $i = 'LIKE';
-            $j = '%';
-        };
-        $string_conditions .= " AND LOWER({$col[0]}) {$i} LOWER('{$j}{$col[3]}{$j}')";
-    };
-};
-if(!empty($string_conditions)){
-    $string_conditions = substr($string_conditions, 5);
-    $string_conditions = 'WHERE '.$string_conditions;
-};
+// Create query string for conditions and order
+$string_conditions = create_condition_string((array) $doc_columns);
+$string_order = create_order_string((array) $doc_columns);
 
-// Create query string for order
-$order_arr = [];
-$order = [];
-$string_order = "";
-foreach($doc_columns as $col) {
-    if ($col[5] == "") {
-        array_push($order_arr, 9999);
-    } else {
-        array_push($order_arr, $col[5]);
-    };
-};
-
-$i = 0;
-while(min($order_arr) < 9999) {
-    $y = array_search(min($order_arr), $order_arr);
-    $order[$i] = $y;
-    $order_arr[$y] = 9999;
-    $i++;
-};
-
-if(!empty($order)) {
-    $string_order .= "ORDER BY ";
-    foreach($order as $o){
-        $string_order .= $doc_columns[$o][0].' '.strtoupper($doc_columns[$o][4]);
-        $string_order .= ", ";
-    };
-    $string_order = substr($string_order, 0, -2);
-    $string_order .= " ";
-};
-
-// Select query to determine number of rows and input for filters
-$query1 = "SELECT * FROM documents {$string_conditions};";
+// Trial query to determine number of rows and input for filters
+$query1 = "SELECT * FROM {$table_name} {$string_conditions};";
 $res = performQuery($query1);
 
 //Determine number of rows, maximum number of pages and input for select options
 $count = pg_num_rows($res);
 $max_pagenum_docs = (int) ceil($count / $num_rows_sel);
-if($count > 20) {
-    $pagenum_options = array(1, 2, 20, 50);
-} elseif ($count > 50) {
-    $pagenum_options = array(1, 2, 20, 50, 100);
-} elseif ($count > 100) {
-    $pagenum_options = array(1, 2, 20, 50, 100, $count);
-} else {
-    $pagenum_options = array(1, 2, 20);
-}
-
-// Determine input for select filters
-$k = 0;
-foreach($doc_columns as $col) {
-    if($col[2] == 'select') {
-        $temp = array_unique(pg_fetch_all_columns($res, pg_field_num($res, $col[0])));
-        asort($temp);
-        array_unshift($temp, "");
-        $doc_columns[$k][7] = $temp;
-    };
-    $k++;
-};
+$pagenum_options = determine_pagenum_options($count);
+$doc_columns = sel_input($doc_columns, $res);
 
 // Retrieve final table to be presented
 $offset = ($pagenum_sel - 1) * $num_rows_sel;
-$query2 = "SELECT * FROM documents {$string_conditions} {$string_order} OFFSET '{$offset}' LIMIT '{$num_rows_sel}' ;";
+$query2 = "SELECT * FROM {$table_name} {$string_conditions} {$string_order} OFFSET '{$offset}' LIMIT '{$num_rows_sel}' ;";
 $data = performQuery($query2);
 $docs = pg_fetch_all($data);
 ?>
@@ -130,7 +70,7 @@ $docs = pg_fetch_all($data);
         <a href="add_doc.php">Create New Document</a>
     </p>
     <div>
-        <form id="doc_table_form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+        <form id="documents_table_form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
             <table id="doc_grid" class="table">
                 <thead>
 					<tr>
@@ -207,32 +147,11 @@ $docs = pg_fetch_all($data);
 <script type="text/javascript">
     <?php foreach($doc_columns as $col): ?>
     $('#order_<?php echo $col[0]; ?>').click(function () {
-        if ($('#order_inp_<?php echo $col[0]; ?>').val() == 'none') {
-            $('#order_inp_<?php echo $col[0]; ?>').val('asc');
-        $('#order_<?php echo $col[0]; ?>').val('asc');
-        } else {
-            if ($('#order_inp_<?php echo $col[0]; ?>').val() == 'asc') {
-                $('#order_inp_<?php echo $col[0]; ?>').val('desc');
-            } else {
-                if ($('#order_inp_<?php echo $col[0]; ?>').val() == 'desc') {
-                    $('#order_inp_<?php echo $col[0]; ?>').val("none");
-                }
-            }
-        };
-
+        modify_order('order_inp_<?php echo $col[0]; ?>');
         <?php foreach($doc_columns as $col2){?>
-              if (($('#order_num_<?php echo $col2[0]; ?>').val() != "")) {
-                   $('#order_num_<?php echo $col2[0]; ?>').val(parseInt($('#order_num_<?php echo $col2[0]; ?>').val(), 10) + 1);
-              };
-              <?php if($col[0] == $col2[0]) { ?>
-                   if (($('#order_inp_<?php echo $col2[0]; ?>').val() == 'none')) {
-                           $('#order_num_<?php echo $col2[0]; ?>').val("");
-                   } else {
-                           $('#order_num_<?php echo $col2[0]; ?>').val(1);
-                   };
-              <?php };?>
+             modify_order_of_orderinput('order_num_<?php echo $col[0]; ?>', 'order_num_<?php echo $col2[0]; ?>' , 'order_inp_<?php echo $col2[0]; ?>');
         <?php };?>
-        $('#doc_table_form').submit();
+        $('#<?php echo $table_name; ?>_table_form').submit();
     });
     <?php endforeach;?>
 </script>

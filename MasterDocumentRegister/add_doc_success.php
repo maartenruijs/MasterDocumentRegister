@@ -9,7 +9,6 @@
 
 <?php include './mains/main_header.php';?>
 <?php include './mains/main_navigation.php';?>
-<?php include "./other/connection.php" ; ?>
 
 <body>
     <div id="wrapper">
