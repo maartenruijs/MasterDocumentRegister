@@ -35,11 +35,10 @@ $sub_table_name = "doc_revisions";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $pagenum_sel = $_POST["pagenum"];
     $num_rows_sel = $_POST["num_rows"];
-    $k = 0;
-    foreach($columns as $col) {
-        if($col[2] == 'select' or $col[2] == 'text') {
+    for($k = 0; $k < count($columns); $k++) {
+        if($columns[$k][2] == 'select' or $columns[$k][2] == 'text') {
             $columns[$k][3] = $_POST["filter_".$columns[$k][0]];
-        } elseif($col[2] == 'datetime') {
+        } elseif($columns[$k][2] == 'datetime') {
             $columns[$k][3][0] = $_POST["filter_".$columns[$k][0]."_from"];
             $columns[$k][3][1] = $_POST["filter_".$columns[$k][0]."_to"];
         };
@@ -49,7 +48,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             $columns[$k][5] = $_POST["order_num_".$columns[$k][0]];
         };
-        $k++;
     };
 };
 

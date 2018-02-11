@@ -152,4 +152,5 @@ function table_filters($input_array_colums) {
         echo '</th>';
     };
 };
+
 ?>
