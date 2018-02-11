@@ -7,13 +7,13 @@ function create_condition_string(array $input_array_columns) {
     foreach($input_array_columns as $col) {
         if(!($col[3] == "")) {
             if ($col[2] == 'select') {
-                $i = '=';
-                $j = '';
+                $string_conditions .= " AND {$col[0]} = '{$col[3]}'";
             } elseif($col[2] == 'text') {
-                $i = 'LIKE';
-                $j = '%';
+                $string_conditions .= " AND LOWER({$col[0]}) LIKE LOWER('%{$col[3]}%')";
+            } elseif($col[2] == 'datetime'){
+                $string_conditions .= " AND ({$col[0]} BETWEEN '{$col[3][0]}' AND '{$col[3][1]}')";
             };
-            $string_conditions .= " AND LOWER({$col[0]}) {$i} LOWER('{$j}{$col[3]}{$j}')";
+
         };
     };
     if(!empty($string_conditions)){
@@ -145,6 +145,9 @@ function table_filters($input_array_colums) {
             echo '</select>';
         } elseif ($col[2] == 'text'){
             echo '<input class="full_width" type="text" name="filter_'.$col[0].'" value="'.$col[3].'" onchange="this.form.submit();">';
+        } elseif ($col[2] == 'datetime') {
+            echo '<input type="datetime-local" class="full_width" name="filter_'.$col[0].'_from" value="'.$col[3][0].'" onchange="this.form.submit();">';
+            echo '<input type="datetime-local" class="full_width" name="filter_'.$col[0].'_to" value="'.$col[3][1].'" onchange="this.form.submit();">';
         };
         echo '</th>';
     };

@@ -5,7 +5,7 @@
 -- Dumped from database version 10.1
 -- Dumped by pg_dump version 10.1
 
--- Started on 2018-02-10 10:39:14
+-- Started on 2018-02-11 19:22:31
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -25,7 +25,7 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- TOC entry 2226 (class 0 OID 0)
+-- TOC entry 2242 (class 0 OID 0)
 -- Dependencies: 1
 -- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
 --
@@ -45,6 +45,18 @@ SET default_with_oids = false;
 --
 
 CREATE TABLE correspondence (
+    project_entity character varying(3) NOT NULL,
+    project_year character varying(4) NOT NULL,
+    project_number character varying(3) NOT NULL,
+    cor_discipline character varying(2) NOT NULL,
+    cor_type character varying(2) NOT NULL,
+    cor_number character varying(4) NOT NULL,
+    in_out character varying(3) NOT NULL,
+    "from" character varying(45)[],
+    "to" character varying(45)[],
+    link character varying(300),
+    date_time timestamp without time zone NOT NULL,
+    subject character varying(255)
 );
 
 
@@ -182,7 +194,7 @@ CREATE SEQUENCE events_id_seq
 ALTER TABLE events_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2227 (class 0 OID 0)
+-- TOC entry 2243 (class 0 OID 0)
 -- Dependencies: 205
 -- Name: events_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -221,7 +233,31 @@ CREATE TABLE test (
 ALTER TABLE test OWNER TO postgres;
 
 --
--- TOC entry 2064 (class 2604 OID 24751)
+-- TOC entry 207 (class 1259 OID 32948)
+-- Name: transmittals; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE transmittals (
+    doc_project_entity character varying(3) NOT NULL,
+    doc_project_year character varying(4) NOT NULL,
+    doc_project_number character varying(3) NOT NULL,
+    doc_discipline character varying(2) NOT NULL,
+    doc_type character varying(3) NOT NULL,
+    doc_number character varying(4) NOT NULL,
+    doc_rev character varying(3) NOT NULL,
+    cor_project_entity character varying(3) NOT NULL,
+    cor_project_year character varying(4) NOT NULL,
+    cor_project_number character varying(3) NOT NULL,
+    cor_discipline character varying(2) NOT NULL,
+    cor_type character varying(2) NOT NULL,
+    cor_number character varying(4) NOT NULL
+);
+
+
+ALTER TABLE transmittals OWNER TO postgres;
+
+--
+-- TOC entry 2069 (class 2604 OID 24751)
 -- Name: events id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -229,17 +265,18 @@ ALTER TABLE ONLY events ALTER COLUMN id SET DEFAULT nextval('events_id_seq'::reg
 
 
 --
--- TOC entry 2214 (class 0 OID 16522)
+-- TOC entry 2229 (class 0 OID 16522)
 -- Dependencies: 201
 -- Data for Name: correspondence; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY correspondence  FROM stdin;
+COPY correspondence (project_entity, project_year, project_number, cor_discipline, cor_type, cor_number, in_out, "from", "to", link, date_time, subject) FROM stdin;
+ARC	2017	017	EN	EM	0001	In	{Henk}	{Piet,Klaas}	E:/Test/test.msg	2018-01-01 23:57:01	test
 \.
 
 
 --
--- TOC entry 2209 (class 0 OID 16385)
+-- TOC entry 2224 (class 0 OID 16385)
 -- Dependencies: 196
 -- Data for Name: crawler; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -8135,7 +8172,7 @@ S:\\X_ARCHIVE\\OD-DS (belangrijke archief info)\\400 - LIBRARY\\460 - TYPICAL DR
 
 
 --
--- TOC entry 2216 (class 0 OID 16559)
+-- TOC entry 2231 (class 0 OID 16559)
 -- Dependencies: 203
 -- Data for Name: disciplines; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -8157,7 +8194,7 @@ TS	Tender Support
 
 
 --
--- TOC entry 2212 (class 0 OID 16468)
+-- TOC entry 2227 (class 0 OID 16468)
 -- Dependencies: 199
 -- Data for Name: doc_revisions; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -8171,7 +8208,7 @@ ARC	2017	017	EN	RP	0001	C04	Approved for use	2017-12-01	{YXI,RNO}	{MRU,EOL}	{ASA
 
 
 --
--- TOC entry 2215 (class 0 OID 16554)
+-- TOC entry 2230 (class 0 OID 16554)
 -- Dependencies: 202
 -- Data for Name: document_types; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -8219,7 +8256,7 @@ WPR	Weekly Progress Report
 
 
 --
--- TOC entry 2211 (class 0 OID 16430)
+-- TOC entry 2226 (class 0 OID 16430)
 -- Dependencies: 198
 -- Data for Name: documents; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -8235,7 +8272,7 @@ OI	2018	001	PM	RP	0001	cghdfgh		Enter a more elaborate document description here
 
 
 --
--- TOC entry 2213 (class 0 OID 16512)
+-- TOC entry 2228 (class 0 OID 16512)
 -- Dependencies: 200
 -- Data for Name: employees; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -8249,7 +8286,7 @@ Yu	Xiao	YXI
 
 
 --
--- TOC entry 2219 (class 0 OID 24748)
+-- TOC entry 2234 (class 0 OID 24748)
 -- Dependencies: 206
 -- Data for Name: events; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -8260,7 +8297,7 @@ COPY events (id, name, date, url, description, duration) FROM stdin;
 
 
 --
--- TOC entry 2210 (class 0 OID 16404)
+-- TOC entry 2225 (class 0 OID 16404)
 -- Dependencies: 197
 -- Data for Name: projects; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -8275,7 +8312,7 @@ ARC	2017	001	dfx	cvbcvnvbv	cbvnvncv	Active
 
 
 --
--- TOC entry 2217 (class 0 OID 16564)
+-- TOC entry 2232 (class 0 OID 16564)
 -- Dependencies: 204
 -- Data for Name: test; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -8309,7 +8346,17 @@ test123456789012345678901234567
 
 
 --
--- TOC entry 2228 (class 0 OID 0)
+-- TOC entry 2235 (class 0 OID 32948)
+-- Dependencies: 207
+-- Data for Name: transmittals; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY transmittals (doc_project_entity, doc_project_year, doc_project_number, doc_discipline, doc_type, doc_number, doc_rev, cor_project_entity, cor_project_year, cor_project_number, cor_discipline, cor_type, cor_number) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2244 (class 0 OID 0)
 -- Dependencies: 205
 -- Name: events_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -8318,7 +8365,7 @@ SELECT pg_catalog.setval('events_id_seq', 33, true);
 
 
 --
--- TOC entry 2066 (class 2606 OID 16545)
+-- TOC entry 2071 (class 2606 OID 16545)
 -- Name: crawler Crawler_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8327,7 +8374,7 @@ ALTER TABLE ONLY crawler
 
 
 --
--- TOC entry 2078 (class 2606 OID 16558)
+-- TOC entry 2085 (class 2606 OID 16558)
 -- Name: document_types Document_Types_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8336,7 +8383,16 @@ ALTER TABLE ONLY document_types
 
 
 --
--- TOC entry 2080 (class 2606 OID 16563)
+-- TOC entry 2083 (class 2606 OID 32942)
+-- Name: correspondence correspondence_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY correspondence
+    ADD CONSTRAINT correspondence_pkey PRIMARY KEY (project_entity, project_year, project_number, cor_discipline, cor_type, cor_number);
+
+
+--
+-- TOC entry 2087 (class 2606 OID 16563)
 -- Name: disciplines disciplines_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8345,7 +8401,7 @@ ALTER TABLE ONLY disciplines
 
 
 --
--- TOC entry 2072 (class 2606 OID 16475)
+-- TOC entry 2077 (class 2606 OID 16475)
 -- Name: doc_revisions doc_revisions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8354,7 +8410,7 @@ ALTER TABLE ONLY doc_revisions
 
 
 --
--- TOC entry 2070 (class 2606 OID 16465)
+-- TOC entry 2075 (class 2606 OID 16465)
 -- Name: documents documents_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8363,7 +8419,7 @@ ALTER TABLE ONLY documents
 
 
 --
--- TOC entry 2074 (class 2606 OID 16518)
+-- TOC entry 2079 (class 2606 OID 16518)
 -- Name: employees employees_first_name_last_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8372,7 +8428,7 @@ ALTER TABLE ONLY employees
 
 
 --
--- TOC entry 2076 (class 2606 OID 16516)
+-- TOC entry 2081 (class 2606 OID 16516)
 -- Name: employees employees_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8381,7 +8437,7 @@ ALTER TABLE ONLY employees
 
 
 --
--- TOC entry 2084 (class 2606 OID 24756)
+-- TOC entry 2091 (class 2606 OID 24756)
 -- Name: events events_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8390,7 +8446,7 @@ ALTER TABLE ONLY events
 
 
 --
--- TOC entry 2068 (class 2606 OID 16501)
+-- TOC entry 2073 (class 2606 OID 16501)
 -- Name: projects projects_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8399,7 +8455,7 @@ ALTER TABLE ONLY projects
 
 
 --
--- TOC entry 2082 (class 2606 OID 16568)
+-- TOC entry 2089 (class 2606 OID 16568)
 -- Name: test test_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -8408,33 +8464,96 @@ ALTER TABLE ONLY test
 
 
 --
--- TOC entry 2086 (class 2606 OID 16481)
--- Name: doc_revisions fk_document_number; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- TOC entry 2093 (class 2606 OID 32952)
+-- Name: transmittals transmittals_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY transmittals
+    ADD CONSTRAINT transmittals_pkey PRIMARY KEY (doc_project_entity, doc_project_number, doc_discipline, doc_type, doc_number, doc_rev, doc_project_year, cor_project_entity, cor_project_year, cor_project_number, cor_discipline, cor_type, cor_number);
+
+
+--
+-- TOC entry 2100 (class 2606 OID 32968)
+-- Name: transmittals cor_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY transmittals
+    ADD CONSTRAINT cor_fkey FOREIGN KEY (cor_project_entity, cor_project_year, cor_project_number, cor_discipline, cor_type, cor_number) REFERENCES correspondence(project_entity, project_year, project_number, cor_discipline, cor_type, cor_number);
+
+
+--
+-- TOC entry 2097 (class 2606 OID 32943)
+-- Name: correspondence correspondence_project_entity_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY correspondence
+    ADD CONSTRAINT correspondence_project_entity_fkey FOREIGN KEY (project_entity, project_year, project_number) REFERENCES projects(project_entity, project_year, project_number);
+
+
+--
+-- TOC entry 2098 (class 2606 OID 32958)
+-- Name: transmittals docs_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY transmittals
+    ADD CONSTRAINT docs_fkey FOREIGN KEY (doc_project_entity, doc_project_year, doc_project_number, doc_discipline, doc_type, doc_number) REFERENCES documents(project_entity, project_year, project_number, doc_discipline, doc_type, doc_number);
+
+
+--
+-- TOC entry 2095 (class 2606 OID 16481)
+-- Name: doc_revisions document_number_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY doc_revisions
-    ADD CONSTRAINT fk_document_number FOREIGN KEY (project_entity, project_year, project_number, doc_discipline, doc_type, doc_number) REFERENCES documents(project_entity, project_year, project_number, doc_discipline, doc_type, doc_number);
+    ADD CONSTRAINT document_number_fkey FOREIGN KEY (project_entity, project_year, project_number, doc_discipline, doc_type, doc_number) REFERENCES documents(project_entity, project_year, project_number, doc_discipline, doc_type, doc_number);
 
 
 --
--- TOC entry 2085 (class 2606 OID 16502)
--- Name: documents fk_project_number; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- TOC entry 2094 (class 2606 OID 16502)
+-- Name: documents project_number_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY documents
-    ADD CONSTRAINT fk_project_number FOREIGN KEY (project_entity, project_year, project_number) REFERENCES projects(project_entity, project_year, project_number);
+    ADD CONSTRAINT project_number_fkey FOREIGN KEY (project_entity, project_year, project_number) REFERENCES projects(project_entity, project_year, project_number);
 
 
 --
--- TOC entry 2087 (class 2606 OID 16507)
--- Name: doc_revisions fk_rev_project; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- TOC entry 2102 (class 2606 OID 32973)
+-- Name: transmittals projects_cor_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY transmittals
+    ADD CONSTRAINT projects_cor_fkey FOREIGN KEY (cor_project_entity, cor_project_year, cor_project_number) REFERENCES projects(project_entity, project_year, project_number);
+
+
+--
+-- TOC entry 2101 (class 2606 OID 32953)
+-- Name: transmittals projects_docs_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY transmittals
+    ADD CONSTRAINT projects_docs_fkey FOREIGN KEY (doc_project_entity, doc_project_year, doc_project_number) REFERENCES projects(project_entity, project_year, project_number);
+
+
+--
+-- TOC entry 2096 (class 2606 OID 16507)
+-- Name: doc_revisions rev_project_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY doc_revisions
-    ADD CONSTRAINT fk_rev_project FOREIGN KEY (project_entity, project_year, project_number) REFERENCES projects(project_entity, project_year, project_number);
+    ADD CONSTRAINT rev_project_fkey FOREIGN KEY (project_entity, project_year, project_number) REFERENCES projects(project_entity, project_year, project_number);
 
 
--- Completed on 2018-02-10 10:39:14
+--
+-- TOC entry 2099 (class 2606 OID 32963)
+-- Name: transmittals revs_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY transmittals
+    ADD CONSTRAINT revs_fkey FOREIGN KEY (doc_project_entity, doc_project_year, doc_project_number, doc_discipline, doc_type, doc_number, doc_rev) REFERENCES doc_revisions(project_entity, project_year, project_number, doc_discipline, doc_type, doc_number, doc_rev);
+
+
+-- Completed on 2018-02-11 19:22:31
 
 --
 -- PostgreSQL database dump complete

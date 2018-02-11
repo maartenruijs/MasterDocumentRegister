@@ -46,6 +46,8 @@
     <Compile Include="transmittals.php" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="db_backup\db_backup.sql" />
+    <Content Include="db_backup\DB_ERD.jpg" />
     <Content Include="divs\div_add_doc_success.php" />
     <Content Include="images\ExampleDashboard.png" />
     <Content Include="images\ARC.png" />
@@ -58,6 +60,7 @@
     <Folder Include="images\" />
     <Folder Include="divs\" />
     <Folder Include="mains\" />
+    <Folder Include="db_backup\" />
     <Folder Include="scripts\" />
   </ItemGroup>
 </Project>

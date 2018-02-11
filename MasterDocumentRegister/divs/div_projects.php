@@ -58,21 +58,23 @@ $table_data = pg_fetch_all($data);
 
 ?>
 <div id="Projects" class="tabcontent">
-    <h3 id="projects_title">Projects</h3>
+    <h3>Projects</h3>
     <p><a href="add_project.php">Create New Project</a></p>
     <div>
-        <form id="projects_table_form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
-            <table id="project_grid" class="table">
+        <form id="<?php echo $table_name;?>_table_form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+            <table class="table">
                 <thead>
                     <tr>
                         <!-- Column Names -->
                         <?php table_headings($columns) ?>
-						<!-- Docs per page -->
+                        <!-- Docs per page -->
                         <th class="float_right" colspan="2"># Projects per page:</th>
-                        <th><?php  select_number_rows_per_page($pagenum_options, $num_rows_sel) ?></th>
+                        <th>
+                            <?php  select_number_rows_per_page($pagenum_options, $num_rows_sel) ?>
+                        </th>
                     </tr>
                     <tr>
-						<!-- Filters -->
+                        <!-- Filters -->
                         <?php table_filters($columns) ?>
                         <!-- Table Page navigation -->
                         <th>
@@ -91,17 +93,23 @@ $table_data = pg_fetch_all($data);
                     </tr>
                 </thead>
                 <tbody>
-					<!-- Main Table Rows -->
+                    <!-- Main Table Rows -->
                     <?php foreach((array) $table_data as $row):?>
                     <tr class="accordion" onclick="openAccordion(this)">
                         <?php foreach($columns as $col) {echo '<td>'.$row[$col[0]].'</td>'; }; ?>
                         <td></td>
-                        <td><a href="javascript:alert('functionality not yet included');" class="btn btn-edit">Edit</a></td>
-                        <td><a href="javascript:alert('functionality not yet included');" class="btn btn-delete">Delete</a></td>
+                        <td>
+                            <a href="javascript:alert('functionality not yet included');" class="btn btn-edit">Edit</a>
+                        </td>
+                        <td>
+                            <a href="javascript:alert('functionality not yet included');" class="btn btn-delete">Delete</a>
+                        </td>
                     </tr>
-					<!-- Sub Table Rows -->
+                    <!-- Sub Table Rows -->
                     <tr class="panel">
-                        <td colspan="<?php echo count($columns);?>"><?php echo $row['long_description'] ?></td>
+                        <td colspan="<?php echo count($columns);?>">
+                            <?php echo $row['long_description'] ?>
+                        </td>
                         <td></td>
                     </tr><?php endforeach;?>
                 </tbody>

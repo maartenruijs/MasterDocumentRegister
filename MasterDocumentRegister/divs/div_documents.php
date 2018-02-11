@@ -2,6 +2,8 @@
 include "./scripts/connection.php";
 include "./scripts/table.php";
 
+// Define columns in_array table ([0] = pg col name, [1] = html col name, [2] = form input type[select/text],
+// [3] = filtervalue, [4] = order[none/asc/desc], [5] = order by, [6] = class name, [7] = array input for select filters, [8] = select filters enable/disable)
 $columns = array(
     array('project_entity', 'Entity', 'select', "", 'none', "", 'entity'),
     array('project_year', 'Year', 'select', "", 'none', "", 'year'),
@@ -12,7 +14,7 @@ $columns = array(
     array('doc_name', 'Doc Name', 'text', "", 'none', "", 'doc_name'),
     array('client_doc_number', 'Client Doc number', 'text', "", 'none', "", 'client_doc_number'),
     array('description', 'Detailed Description', 'text', "", 'none', "", 'long_description'));
-$rev_columns = array(
+$sub_columns = array(
     array('project_entity', 'Entity'),
     array('project_year', 'Year'),
     array('project_number', 'Number'),
@@ -25,6 +27,7 @@ $rev_columns = array(
 $num_rows_sel = 20;
 $pagenum_sel = 1;
 $table_name = "documents";
+$sub_table_name = "doc_revisions";
 
 //Update when form is submitted (onchange!) and filters, amount of pages to show and pagenumber are updated
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -68,23 +71,25 @@ $table_data = pg_fetch_all($data);
 ?>
 
 <div id="docs" class="tabcontent">
-    <h3 id="doc_title">Documents</h3>
+    <h3>Documents</h3>
     <p><a href="add_doc.php">Create New Document</a></p>
     <div>
-        <form id="documents_table_form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
-            <table id="doc_grid" class="table">
+        <form id="<?php echo $table_name;?>_table_form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+            <table class="table">
                 <thead>
                     <tr>
                         <!-- Column Names -->
                         <?php table_headings($columns) ?>
-						<!-- Docs per page -->
+                        <!-- Docs per page -->
                         <th class="float_right" colspan="2"># Projects per page:</th>
-                        <th><?php  select_number_rows_per_page($pagenum_options, $num_rows_sel) ?></th>
+                        <th>
+                            <?php  select_number_rows_per_page($pagenum_options, $num_rows_sel) ?>
+                        </th>
                     </tr>
                     <tr>
-						<!-- Filters -->
+                        <!-- Filters -->
                         <?php table_filters($columns) ?>
-						<!-- Table Page navigation -->
+                        <!-- Table Page navigation -->
                         <th class="float_right">
                             <button onclick="firstPage();">&laquo;</button>
                             <button onclick="prevPage(<?php echo $pagenum_sel ?>);">&lsaquo;</button>
@@ -96,32 +101,46 @@ $table_data = pg_fetch_all($data);
                         </th>
                         <th>
                             <button onclick="nextPage(<?php echo $pagenum_sel.', '.$max_pagenum ?>);">&rsaquo;</button>
-                            <button onclick="LastPage(<?php echo $max_pagenum ?>);"> &raquo;</button>
+                            <button onclick="LastPage(<?php echo $max_pagenum ?>);">&raquo;</button>
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-					<!-- Main Table Rows -->
+                    <!-- Main Table Rows -->
                     <?php foreach((array) $table_data as $row) {?>
-                        <tr class="accordion" onclick="openAccordion(this)">
-                            <?php foreach($columns as $col) {echo '<td>'.$row[$col[0]].'</td>'; } ?>
-                            <td><a href="javascript:alert('functionality not yet included');" target="_blank" class="btn btn-addRev">Add Rev</a></td>
-                            <td><a href="javascript:alert('functionality not yet included');" target="_blank" class="btn btn-edit">Edit</a></td>
-                            <td><a href="javascript:alert('functionality not yet included');" target="_blank" class="btn btn-delete">Delete</a></td>
-                        </tr>
-					    <!-- Sub Table Rows -->
-                        <?php
-                        $query3 = "SELECT * FROM doc_revisions WHERE project_entity = '{$row['project_entity']}' AND project_year = '{$row['project_year']}' AND project_number = '{$row['project_number']}' AND doc_discipline = '{$row['doc_discipline']}' AND doc_type = '{$row['doc_type']}' AND doc_number = '{$row['doc_number']}'";
+                    <tr class="accordion" onclick="openAccordion(this)">
+                        <?php foreach($columns as $col) {echo '<td>'.$row[$col[0]].'</td>'; } ?>
+                        <td>
+                            <a href="javascript:alert('functionality not yet included');" target="_blank" class="btn btn-addRev">Add Rev</a>
+                        </td>
+                        <td>
+                            <a href="javascript:alert('functionality not yet included');" target="_blank" class="btn btn-edit">Edit</a>
+                        </td>
+                        <td>
+                            <a href="javascript:alert('functionality not yet included');" target="_blank" class="btn btn-delete">Delete</a>
+                        </td>
+                    </tr>
+                    <!-- Sub Table Rows -->
+                    <?php
+                        $query3 =  "SELECT * 
+                                    FROM {$sub_table_name} 
+                                    WHERE project_entity = '{$row['project_entity']}' 
+                                    AND project_year = '{$row['project_year']}' 
+                                    AND project_number = '{$row['project_number']}' 
+                                    AND doc_discipline = '{$row['doc_discipline']}' 
+                                    AND doc_type = '{$row['doc_type']}' 
+                                    AND doc_number = '{$row['doc_number']}'
+                                    ";
                         $data = performQuery($query3);
-                        $revs = pg_fetch_all($data);
-                        if (!empty($revs)) {
+                        $array = pg_fetch_all($data);
+                        if (!empty($array)) {
                             echo '<tr class="panel">';
-                                foreach($rev_columns as $rev_column) {echo '<th>'.$rev_column[1].'</th>';}
+                                foreach($sub_columns as $scol) {echo '<th>'.$scol[1].'</th>';}
                             echo '</tr>';
-                            foreach((array) $revs as $rev) {
+                            foreach((array) $array as $el) {
                                 echo '<tr class="panel">';
-                                    foreach($rev_columns as $rev_column) {
-                                        echo '<td>'.$rev[$rev_column[0]].'</td>';
+                                    foreach($sub_columns as $scol) {
+                                        echo '<td>'.$el[$scol[0]].'</td>';
                                     };
                                     echo '<td><a href="#" target="_blank" class="btn btn-link">Link</a></td>';
                                     echo '<td><a href="#" target="_blank" class="btn btn-edit">Edit</a></td>';
