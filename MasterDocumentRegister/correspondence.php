@@ -17,7 +17,7 @@
             <?php include("./mains/main_aside.php"); ?>
         </div>
         <div id="main">
-            <?php include("./divs/div_correspondence.php"); ?>
+            <?php include("./divs/div_correspondence.php"); ?> 
         </div>
     </div>
 </body>
