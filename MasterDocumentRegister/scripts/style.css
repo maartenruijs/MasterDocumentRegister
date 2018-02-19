@@ -263,3 +263,12 @@ i {
 #option_disabled {
     color: grey;
 }
+
+.table_nav {
+    float: right;
+}
+
+.table_nav_left_buttons {
+    float: right;
+}
+

@@ -67,30 +67,39 @@ $table_data = pg_fetch_all($data);
     </div>
     <div>
 		<form id="<?php echo $table_name;?>_table_form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
-			<table class="table">
+			<!-- Table Page navigation -->
+            <div class="table_nav">
+                <table>
+					<tr>
+                        <td class="table_nav_label"><label>Projects per page: </label></td>
+                        <td class="table_nav_numpages"><?php  select_number_rows_per_page($pagenum_options, $num_rows_sel) ?></td>
+					</tr>
+                    <tr>
+                        <td class="table_nav_left_buttons table_nav_buttons">
+                            <button onclick="firstPage();">&laquo;</button>
+                            <button onclick="prevPage(<?php echo $pagenum_sel ?>);">&lsaquo;</button>
+                        </td>
+                        <td class="table_nav_pagenum">
+                            <select id="sel_pagenum" class="numtable" name="pagenum" onchange="this.form.submit();">
+                                <?php foreach(range(1, $max_pagenum) as $num) {echo '<option value="'.$num.'" '.(($pagenum_sel == $num) ? 'selected' : "").'>'.$num.'</option>';} ?>
+                            </select>
+                        </td>
+                        <td class="table_nav_right_buttons table_nav_buttons">
+                            <button onclick="nextPage(<?php echo $pagenum_sel.', '.$max_pagenum ?>);">&rsaquo;</button>
+                            <button onclick="LastPage(<?php echo $max_pagenum ?>);">&raquo;</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <table class="table">
 				<thead>
 					<tr>
-						<!-- Column Names --><?php table_headings($columns) ?>
-						<!-- Docs per page -->
-						<th class="float_right" colspan="2"># Projects per page:</th>
-						<th><?php  select_number_rows_per_page($pagenum_options, $num_rows_sel) ?>
-						</th>
+						<!-- Column Names -->
+                        <?php table_headings($columns) ?>
 					</tr>
 					<tr>
-						<!-- Filters --><?php table_filters($columns) ?>
-						<!-- Table Page navigation -->
-						<th>
-							<button onclick="firstPage();">&laquo;</button>
-							<button onclick="prevPage(<?php echo $pagenum_sel ?>);">&lsaquo;</button>
-						</th>
-						<th>
-							<select id="sel_pagenum" class="numtable" name="pagenum" onchange="this.form.submit();"><?php foreach(range(1, $max_pagenum) as $num) {echo '<option value="'.$num.'" '.(($pagenum_sel == $num) ? 'selected' : "").'>'.$num.'</option>';} ?>
-							</select>
-						</th>
-						<th>
-							<button onclick="nextPage(<?php echo $pagenum_sel.', '.$max_pagenum ?>);">&rsaquo;</button>
-							<button onclick="LastPage(<?php echo $max_pagenum ?>);">&raquo;</button>
-						</th>
+						<!-- Filters -->
+                        <?php table_filters($columns) ?>
 					</tr>
 				</thead>
 				<tbody>
