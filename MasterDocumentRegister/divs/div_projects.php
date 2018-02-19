@@ -61,63 +61,58 @@ $table_data = pg_fetch_all($data);
 
 ?>
 <div id="Projects" class="tabcontent">
-    <h3>Projects</h3>
-    <p><a href="add_project.php">Create New Project</a></p>
     <div>
-        <form id="<?php echo $table_name;?>_table_form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <!-- Column Names -->
-                        <?php table_headings($columns) ?>
-                        <!-- Docs per page -->
-                        <th class="float_right" colspan="2"># Projects per page:</th>
-                        <th>
-                            <?php  select_number_rows_per_page($pagenum_options, $num_rows_sel) ?>
-                        </th>
-                    </tr>
-                    <tr>
-                        <!-- Filters -->
-                        <?php table_filters($columns) ?>
-                        <!-- Table Page navigation -->
-                        <th>
-                            <button onclick="firstPage();">&laquo;</button>
-                            <button onclick="prevPage(<?php echo $pagenum_sel ?>);">&lsaquo;</button>
-                        </th>
-                        <th>
-                            <select id="sel_pagenum" class="numtable" name="pagenum" onchange="this.form.submit();">
-                                <?php foreach(range(1, $max_pagenum) as $num) {echo '<option value="'.$num.'" '.(($pagenum_sel == $num) ? 'selected' : "").'>'.$num.'</option>';} ?>
-                            </select>
-                        </th>
-                        <th>
-                            <button onclick="nextPage(<?php echo $pagenum_sel.', '.$max_pagenum ?>);">&rsaquo;</button>
-                            <button onclick="LastPage(<?php echo $max_pagenum ?>);">&raquo;</button>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Main Table Rows -->
-                    <?php foreach((array) $table_data as $row):?>
-                    <tr class="accordion" onclick="openAccordion(this)">
-                        <?php foreach($columns as $col) {echo '<td>'.$row[$col[0]].'</td>'; }; ?>
-                        <td></td>
-                        <td>
-                            <a href="javascript:alert('functionality not yet included');" class="btn btn-edit">Edit</a>
-                        </td>
-                        <td>
-                            <a href="javascript:alert('functionality not yet included');" class="btn btn-delete">Delete</a>
-                        </td>
-                    </tr>
-                    <!-- Sub Table Rows -->
-                    <tr class="panel">
-                        <td colspan="<?php echo count($columns);?>">
-                            <?php echo $row['long_description'] ?>
-                        </td>
-                        <td></td>
-                    </tr><?php endforeach;?>
-                </tbody>
-            </table>
-        </form>
+        <h3>Projects</h3>
+        <p><a href="add_project.php">Create New Project</a></p>
+    </div>
+    <div>
+		<form id="<?php echo $table_name;?>_table_form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+			<table class="table">
+				<thead>
+					<tr>
+						<!-- Column Names --><?php table_headings($columns) ?>
+						<!-- Docs per page -->
+						<th class="float_right" colspan="2"># Projects per page:</th>
+						<th><?php  select_number_rows_per_page($pagenum_options, $num_rows_sel) ?>
+						</th>
+					</tr>
+					<tr>
+						<!-- Filters --><?php table_filters($columns) ?>
+						<!-- Table Page navigation -->
+						<th>
+							<button onclick="firstPage();">&laquo;</button>
+							<button onclick="prevPage(<?php echo $pagenum_sel ?>);">&lsaquo;</button>
+						</th>
+						<th>
+							<select id="sel_pagenum" class="numtable" name="pagenum" onchange="this.form.submit();"><?php foreach(range(1, $max_pagenum) as $num) {echo '<option value="'.$num.'" '.(($pagenum_sel == $num) ? 'selected' : "").'>'.$num.'</option>';} ?>
+							</select>
+						</th>
+						<th>
+							<button onclick="nextPage(<?php echo $pagenum_sel.', '.$max_pagenum ?>);">&rsaquo;</button>
+							<button onclick="LastPage(<?php echo $max_pagenum ?>);">&raquo;</button>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<!-- Main Table Rows --><?php foreach((array) $table_data as $row):?>
+					<tr class="accordion" onclick="openAccordion(this)"><?php foreach($columns as $col) {echo '<td>'.$row[$col[0]].'</td>'; }; ?>
+						<td></td>
+						<td>
+							<a href="javascript:alert('functionality not yet included');" class="btn btn-edit">Edit</a>
+						</td>
+						<td>
+							<a href="javascript:alert('functionality not yet included');" class="btn btn-delete">Delete</a>
+						</td>
+					</tr>
+					<!-- Sub Table Rows -->
+					<tr class="panel">
+						<td colspan="<?php echo count($columns);?>"><?php echo $row['long_description'] ?>
+						</td>
+						<td></td>
+					</tr><?php endforeach;?>
+				</tbody>
+			</table>
+		</form>
     </div>
 </div>
 
