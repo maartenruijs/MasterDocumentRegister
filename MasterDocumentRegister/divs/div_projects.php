@@ -3,14 +3,14 @@ include "./scripts/connection.php";
 include "./scripts/table.php";
 
 // Define columns in_array table ([0] = pg col name, [1] = html col name, [2] = form input type[select/text],
-// [3] = filtervalue, [4] = order[none/asc/desc], [5] = order by, [6] = class name, [7] = array input for select filters, [8] = select filters enable/disable)
+// [3] = filtervalue, [4] = order[none/asc/desc], [5] = order by, [6] = class name for col spacing, [7] = array input for select filters, [8] = select filters enable/disable)
 $columns = array(
-    array('project_entity', 'Entity', 'select', "", 'none', "", 'entity'),
-    array('project_year', 'Year', 'select', "", 'none', "", 'year'),
-    array('project_number', 'Number', 'select', "", 'none', "", 'pr_num'),
-    array('client', 'Client', 'text', "", 'none', "", 'client'),
-    array('short_description', 'Description', 'text', "", 'none', "", 'sh_descr'),
-    array('status', 'Status', 'select', "", 'none', "", 'status'));
+    array('project_entity', 'Entity', 'select', "", 'none', "", 'col50'),
+    array('project_year', 'Year', 'select', "", 'none', "", 'col50'),
+    array('project_number', 'Number', 'select', "", 'none', "", 'col50'),
+    array('client', 'Client', 'text', "", 'none', "", 'col50'),
+    array('short_description', 'Description', 'text', "", 'none', "", 'col250'),
+    array('status', 'Status', 'select', "", 'none', "", 'col100'));
 
 $num_rows_sel = 20;
 $pagenum_sel = 1;
@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     for($k = 0; $k < count($columns); $k++) {
         if($columns[$k][2] == 'select' or $columns[$k][2] == 'text') {
             $columns[$k][3] = $_POST["filter_".$columns[$k][0]];
-        } elseif($columns[$k][2] == 'datetime') {
+        } elseif($columns[$k][2] == 'date') {
             $columns[$k][3][0] = $_POST["filter_".$columns[$k][0]."_from"];
             $columns[$k][3][1] = $_POST["filter_".$columns[$k][0]."_to"];
         };
@@ -61,19 +61,21 @@ $table_data = pg_fetch_all($data);
 
 ?>
 <div id="Projects" class="tabcontent">
-    <div>
-        <h3>Projects</h3>
-        <p><a href="add_project.php">Create New Project</a></p>
-    </div>
-    <div>
-		<form id="<?php echo $table_name;?>_table_form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
-			<!-- Table Page navigation -->
+    <h3>Projects</h3>
+    <p><a href="add_project.php">Create New Project</a></p>
+    <div class="table_wrapper">
+        <form id="<?php echo $table_name;?>_table_form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+            <!-- Table Page navigation -->
             <div class="table_nav">
                 <table>
-					<tr>
-                        <td class="table_nav_label"><label>Projects per page: </label></td>
-                        <td class="table_nav_numpages"><?php  select_number_rows_per_page($pagenum_options, $num_rows_sel) ?></td>
-					</tr>
+                    <tr>
+                        <td class="table_nav_label">
+                            <label>Projects per page: </label>
+                        </td>
+                        <td class="table_nav_numpages">
+                            <?php  select_number_rows_per_page($pagenum_options, $num_rows_sel) ?>
+                        </td>
+                    </tr>
                     <tr>
                         <td class="table_nav_left_buttons table_nav_buttons">
                             <button onclick="firstPage();">&laquo;</button>
@@ -92,36 +94,37 @@ $table_data = pg_fetch_all($data);
                 </table>
             </div>
             <table class="table">
-				<thead>
-					<tr>
-						<!-- Column Names -->
+                <thead>
+                    <tr>
+                        <!-- Column Names -->
                         <?php table_headings($columns) ?>
-					</tr>
-					<tr>
-						<!-- Filters -->
+                    </tr>
+                    <tr>
+                        <!-- Filters -->
                         <?php table_filters($columns) ?>
-					</tr>
-				</thead>
-				<tbody>
-					<!-- Main Table Rows --><?php foreach((array) $table_data as $row):?>
-					<tr class="accordion" onclick="openAccordion(this)"><?php foreach($columns as $col) {echo '<td>'.$row[$col[0]].'</td>'; }; ?>
-						<td></td>
-						<td>
-							<a href="javascript:alert('functionality not yet included');" class="btn btn-edit">Edit</a>
-						</td>
-						<td>
-							<a href="javascript:alert('functionality not yet included');" class="btn btn-delete">Delete</a>
-						</td>
-					</tr>
-					<!-- Sub Table Rows -->
-					<tr class="panel">
-						<td colspan="<?php echo count($columns);?>"><?php echo $row['long_description'] ?>
-						</td>
-						<td></td>
-					</tr><?php endforeach;?>
-				</tbody>
-			</table>
-		</form>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Main Table Rows --><?php foreach((array) $table_data as $row):?>
+                    <tr class="accordion" onclick="openAccordion(this)">
+                        <?php foreach($columns as $col) {echo '<td>'.$row[$col[0]].'</td>'; }; ?>
+                        <td>
+                            <a href="javascript:alert('functionality not yet included');" class="btn btn-edit">Edit</a>
+                        </td>
+                        <td>
+                            <a href="javascript:alert('functionality not yet included');" class="btn btn-delete">Delete</a>
+                        </td>
+                    </tr>
+                    <!-- Sub Table Rows -->
+                    <tr class="panel">
+                        <td colspan="<?php echo count($columns);?>">
+                            <?php echo $row['long_description'] ?>
+                        </td>
+                        <td></td>
+                    </tr><?php endforeach;?>
+                </tbody>
+            </table>
+        </form>
     </div>
 </div>
 

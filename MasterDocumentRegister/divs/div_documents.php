@@ -3,17 +3,17 @@ include "./scripts/connection.php";
 include "./scripts/table.php";
 
 // Define columns in_array table ([0] = pg col name, [1] = html col name, [2] = form input type[select/text],
-// [3] = filtervalue, [4] = order[none/asc/desc], [5] = order by, [6] = class name, [7] = array input for select filters, [8] = select filters enable/disable)
+// [3] = filtervalue, [4] = order[none/asc/desc], [5] = order by, [6] = class name for col spacing, [7] = array input for select filters, [8] = select filters enable/disable)
 $columns = array(
-    array('project_entity', 'Entity', 'select', "", 'none', "", 'entity'),
-    array('project_year', 'Year', 'select', "", 'none', "", 'year'),
-    array('project_number', 'Number', 'select', "", 'none', "", 'pr_num'),
-    array('doc_discipline', 'Discipline', 'select', "", 'none', "", 'disc'),
-    array('doc_type', 'Doc Type', 'select', "", 'none', "", 'doc_type'),
-    array('doc_number', 'Doc number', 'select', "", 'none', "", 'doc_num'),
-    array('doc_name', 'Doc Name', 'text', "", 'none', "", 'doc_name'),
-    array('client_doc_number', 'Client Doc number', 'text', "", 'none', "", 'client_doc_number'),
-    array('description', 'Detailed Description', 'text', "", 'none', "", 'long_description'));
+    array('project_entity', 'Entity', 'select', "", 'none', "", 'col50'),
+    array('project_year', 'Year', 'select', "", 'none', "", 'col50'),
+    array('project_number', 'Number', 'select', "", 'none', "", 'col50'),
+    array('doc_discipline', 'Discipline', 'select', "", 'none', "", 'col50'),
+    array('doc_type', 'Doc Type', 'select', "", 'none', "", 'col50'),
+    array('doc_number', 'Doc number', 'select', "", 'none', "", 'col75'),
+    array('doc_name', 'Doc Name', 'text', "", 'none', "", 'col150'),
+    array('client_doc_number', 'Client Doc number', 'text', "", 'none', "", 'col100'),
+    array('description', 'Detailed Description', 'text', "", 'none', "", 'col250'));
 $sub_columns = array(
     array('project_entity', 'Entity'),
     array('project_year', 'Year'),
@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     for($k = 0; $k < count($columns); $k++) {
         if($columns[$k][2] == 'select' or $columns[$k][2] == 'text') {
             $columns[$k][3] = $_POST["filter_".$columns[$k][0]];
-        } elseif($columns[$k][2] == 'datetime') {
+        } elseif($columns[$k][2] == 'date') {
             $columns[$k][3][0] = $_POST["filter_".$columns[$k][0]."_from"];
             $columns[$k][3][1] = $_POST["filter_".$columns[$k][0]."_to"];
         };
@@ -76,7 +76,7 @@ $table_data = pg_fetch_all($data);
 <div id="docs" class="tabcontent">
     <h3>Documents</h3>
     <p><a href="add_doc.php">Create New Document</a></p>
-    <div>
+    <div class="table_wrapper">
         <form id="<?php echo $table_name;?>_table_form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
             <!-- Table Page navigation -->
             <div class="table_nav">

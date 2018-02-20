@@ -2,15 +2,13 @@
 // Create query string for conditions
 function create_condition_string(array $input_array_columns) {
     $string_conditions = '';
-    $i = '';
-    $j = '';
     foreach($input_array_columns as $col) {
         if(!($col[3] == "")) {
             if ($col[2] == 'select') {
                 $string_conditions .= " AND {$col[0]} = '{$col[3]}'";
             } elseif($col[2] == 'text') {
                 $string_conditions .= " AND LOWER({$col[0]}) LIKE LOWER('%{$col[3]}%')";
-            } elseif($col[2] == 'datetime'){
+            } elseif($col[2] == 'date'){
                 $string_conditions .= " AND ({$col[0]} BETWEEN '{$col[3][0]}' AND '{$col[3][1]}')";
             };
 
@@ -122,7 +120,8 @@ function order_js($input_array_colums, $table_name) {
 
 function table_headings($input_array_colums) {
     foreach($input_array_colums as $col) {
-        echo '<th class="'.$col[6].'">'.$col[1].str_repeat('&nbsp;', 1).'<i class="'.$col[4].'" id="order_'.$col[0].'"></i><input type="text" class="invis" id="order_inp_'.$col[0].'" name="order_inp_'.$col[0].'" value="'.$col[4].'"><input type="text" class="invis" id="order_num_'.$col[0].'" name="order_num_'.$col[0].'" value="'.$col[5].'"></th>';}
+        echo '<th class="'.$col[6].'">'.$col[1].str_repeat('&nbsp;', 1).'<i class="'.$col[4].'" id="order_'.$col[0].'"></i><input type="text" class="invis" id="order_inp_'.$col[0].'" name="order_inp_'.$col[0].'" value="'.$col[4].'"><input type="text" class="invis" id="order_num_'.$col[0].'" name="order_num_'.$col[0].'" value="'.$col[5].'"></th>';
+    }
 };
 
 function select_number_rows_per_page($pagenum_options, $num_rows_sel) {
@@ -145,9 +144,9 @@ function table_filters($input_array_colums) {
             echo '</select>';
         } elseif ($col[2] == 'text'){
             echo '<input class="full_width" type="text" name="filter_'.$col[0].'" value="'.$col[3].'" onchange="this.form.submit();">';
-        } elseif ($col[2] == 'datetime') {
-            echo '<input type="datetime-local" class="full_width" name="filter_'.$col[0].'_from" value="'.$col[3][0].'" onchange="this.form.submit();">';
-            echo '<input type="datetime-local" class="full_width" name="filter_'.$col[0].'_to" value="'.$col[3][1].'" onchange="this.form.submit();">';
+        } elseif ($col[2] == 'date') {
+            echo '<input type="date" class="half_width" name="filter_'.$col[0].'_from" value="'.$col[3][0].'" onchange="setTimeout("this.form.submit()", 1000);">';
+            echo '<input type="date" class="half_width" name="filter_'.$col[0].'_to" value="'.$col[3][1].'" onchange="setTimeout("this.form.submit()", 1000);">';
         };
         echo '</th>';
     };

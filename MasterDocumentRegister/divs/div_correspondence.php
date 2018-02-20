@@ -3,19 +3,19 @@ include "./scripts/connection.php";
 include "./scripts/table.php";
 
 // Define columns in_array table ([0] = pg col name, [1] = html col name, [2] = form input type[select/text],
-// [3] = filtervalue, [4] = order[none/asc/desc], [5] = order by, [6] = class name, [7] = array input for select filters, [8] = select filters enable/disable)
+// [3] = filtervalue, [4] = order[none/asc/desc], [5] = order by, [6] = class name for col spacing, [7] = array input for select filters, [8] = select filters enable/disable)
 $columns = array(
-    array('project_entity', 'Entity', 'select', "", 'none', "", 'entity'),
-    array('project_year', 'Year', 'select', "", 'none', "", 'year'),
-    array('project_number', 'Number', 'select', "", 'none', "", 'pr_num'),
-    array('cor_discipline', 'Discipline', 'select', "", 'none', "", 'disc'),
-    array('cor_type', 'Cor Type', 'select', "", 'none', "", 'cor_type'),
-    array('cor_number', 'Cor number', 'select', "", 'none', "", 'cor_num'),
-    array('in_out', 'In / Out', 'select', "", 'none', "", 'in_out'),
-    array('date_time', 'Date / Time', 'datetime', array('1900-01-01T12:00', '2100-01-01T12:00'), 'none', "", 'date_time'),
-    array('subject', 'Subject', 'text', "", 'none', "", 'subject'),
-    array('from', 'From', 'text', "", 'none', "", 'from'),
-    array('to', 'To', 'text', "", 'none', "", 'to'));
+    array('project_entity', 'Entity', 'select', "", 'none', "", 'col50'),
+    array('project_year', 'Year', 'select', "", 'none', "", 'col50'),
+    array('project_number', 'Number', 'select', "", 'none', "", 'col50'),
+    array('cor_discipline', 'Discipline', 'select', "", 'none', "", 'col50'),
+    array('cor_type', 'Cor Type', 'select', "", 'none', "", 'col50'),
+    array('cor_number', 'Cor number', 'select', "", 'none', "", 'col50'),
+    array('in_out', 'In / Out', 'select', "", 'none', "", 'col50'),
+    array('date_time', 'Date / Time', 'date', array('1900-01-01', '2100-01-01'), 'none', "", 'col150'),
+    array('subject', 'Subject', 'text', "", 'none', "", 'col150'),
+    array('from', 'From', 'text', "", 'none', "", 'col50'),
+    array('to', 'To', 'text', "", 'none', "", 'col50'));
 $sub_columns = array(
     array('doc_project_entity', 'Entity'),
     array('doc_project_year', 'Year'),
@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     for($k = 0; $k < count($columns); $k++) {
         if($columns[$k][2] == 'select' or $columns[$k][2] == 'text') {
             $columns[$k][3] = $_POST["filter_".$columns[$k][0]];
-        } elseif($columns[$k][2] == 'datetime') {
+        } elseif($columns[$k][2] == 'date') {
             $columns[$k][3][0] = $_POST["filter_".$columns[$k][0]."_from"];
             $columns[$k][3][1] = $_POST["filter_".$columns[$k][0]."_to"];
         };
@@ -77,67 +77,58 @@ $table_data = pg_fetch_all($data);
 
 <div id="docs" class="tabcontent">
     <h3>Correspondence</h3>
-    <p>
-        <a href="add_cor.php">Create New Document</a>
-    </p>
-    <div>
-        <form id="<?php echo $table_name;?>_table_form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
-            <!-- Table Page navigation -->
-            <div class="table_nav">
-                <table>
-                    <tr>
-                        <td class="table_nav_label">
-                            <label>Correspondences per page: </label>
-                        </td>
-                        <td class="table_nav_numpages">
-                            <?php  select_number_rows_per_page($pagenum_options, $num_rows_sel) ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="table_nav_left_buttons table_nav_buttons">
-                            <button onclick="firstPage();">&laquo;</button>
-                            <button onclick="prevPage(<?php echo $pagenum_sel ?>);">&lsaquo;</button>
-                        </td>
-                        <td class="table_nav_pagenum">
-                            <select id="sel_pagenum" class="numtable" name="pagenum" onchange="this.form.submit();">
-                                <?php foreach(range(1, $max_pagenum) as $num) {echo '<option value="'.$num.'" '.(($pagenum_sel == $num) ? 'selected' : "").'>'.$num.'</option>';} ?>
-                            </select>
-                        </td>
-                        <td class="table_nav_right_buttons table_nav_buttons">
-                            <button onclick="nextPage(<?php echo $pagenum_sel.', '.$max_pagenum ?>);">&rsaquo;</button>
-                            <button onclick="LastPage(<?php echo $max_pagenum ?>);">&raquo;</button>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <!-- Column Names -->
-                        <?php table_headings($columns) ?>
-                    </tr>
-                    <tr>
-                        <!-- Filters -->
-                        <?php table_filters($columns) ?>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Main Table Rows -->
-                    <?php foreach((array) $table_data as $row) {?>
-                    <tr class="accordion" onclick="openAccordion(this)">
-                        <?php foreach($columns as $col) {echo '<td>'.$row[$col[0]].'</td>'; } ?>
-                        <td>
-                            <a href="javascript:alert('functionality not yet included');" target="_blank" class="btn btn-addRev">Add Rev</a>
-                        </td>
-                        <td>
-                            <a href="javascript:alert('functionality not yet included');" target="_blank" class="btn btn-edit">Edit</a>
-                        </td>
-                        <td>
-                            <a href="javascript:alert('functionality not yet included');" target="_blank" class="btn btn-delete">Delete</a>
-                        </td>
-                    </tr>
-                    <!-- Sub Table Rows -->
-                    <?php
+    <p><a href="add_cor.php">Create New Document</a></p>
+	<div class="table_wrapper">
+		<form id="<?php echo $table_name;?>_table_form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+			<!-- Table Page navigation -->
+			<div class="table_nav">
+				<table>
+					<tr>
+						<td class="table_nav_label">
+							<label>Correspondences per page: </label>
+						</td>
+						<td class="table_nav_numpages"><?php  select_number_rows_per_page($pagenum_options, $num_rows_sel) ?>
+						</td>
+					</tr>
+					<tr>
+						<td class="table_nav_left_buttons table_nav_buttons">
+							<button onclick="firstPage();">&laquo;</button>
+							<button onclick="prevPage(<?php echo $pagenum_sel ?>);">&lsaquo;</button>
+						</td>
+						<td class="table_nav_pagenum">
+							<select id="sel_pagenum" class="numtable" name="pagenum" onchange="this.form.submit();"><?php foreach(range(1, $max_pagenum) as $num) {echo '<option value="'.$num.'" '.(($pagenum_sel == $num) ? 'selected' : "").'>'.$num.'</option>';} ?>
+							</select>
+						</td>
+						<td class="table_nav_right_buttons table_nav_buttons">
+							<button onclick="nextPage(<?php echo $pagenum_sel.', '.$max_pagenum ?>);">&rsaquo;</button>
+							<button onclick="LastPage(<?php echo $max_pagenum ?>);">&raquo;</button>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<table class="table">
+				<thead>
+					<tr>
+						<!-- Column Names --><?php table_headings($columns) ?>
+					</tr>
+					<tr>
+						<!-- Filters --><?php table_filters($columns) ?>
+					</tr>
+				</thead>
+				<tbody>
+					<!-- Main Table Rows --><?php foreach((array) $table_data as $row) {?>
+					<tr class="accordion" onclick="openAccordion(this)"><?php foreach($columns as $col) {echo '<td>'.$row[$col[0]].'</td>'; } ?>
+						<td>
+							<a href="javascript:alert('functionality not yet included');" target="_blank" class="btn btn-addRev">Add Rev</a>
+						</td>
+						<td>
+							<a href="javascript:alert('functionality not yet included');" target="_blank" class="btn btn-edit">Edit</a>
+						</td>
+						<td>
+							<a href="javascript:alert('functionality not yet included');" target="_blank" class="btn btn-delete">Delete</a>
+						</td>
+					</tr>
+					<!-- Sub Table Rows --><?php
                               $query3 =  "SELECT
 	                                        transmittals.doc_project_entity,
 	                                        transmittals.doc_project_year,
@@ -189,10 +180,10 @@ $table_data = pg_fetch_all($data);
                             echo '<tr class="panel"><td colspan="9">No transmittals in database</td></tr>';
                         };
                     };?>
-                </tbody>
-            </table>
-        </form>
-    </div>
+				</tbody>
+			</table>
+		</form>
+	</div>
 </div>
 
 <script type="text/javascript">
